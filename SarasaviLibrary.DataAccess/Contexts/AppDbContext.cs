@@ -13,12 +13,17 @@ namespace SarasaviLibrary.DataAccess.Contexts
         public DbSet<Loan> Loans { get; set; } = null!;
         public DbSet<Reservation> Reservations { get; set; } = null!;
 
+        public AppDbContext()
+        {
+            Database.EnsureCreated();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
                 // Note: In a real app, use a connection string from appsettings.json
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=SarasaviLibraryDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+                optionsBuilder.UseSqlite("Data Source=library.db");
             }
         }
 
@@ -52,6 +57,7 @@ namespace SarasaviLibrary.DataAccess.Contexts
                 .HasOne(l => l.Borrower)
                 .WithMany(b => b.ActiveLoans)
                 .HasForeignKey(l => l.UserNumber)
+                .HasPrincipalKey(b => b.UserNumber)
                 .OnDelete(DeleteBehavior.Restrict);
 
             // Reservation relationships
@@ -65,6 +71,7 @@ namespace SarasaviLibrary.DataAccess.Contexts
                 .HasOne(r => r.Borrower)
                 .WithMany(b => b.Reservations)
                 .HasForeignKey(r => r.UserNumber)
+                .HasPrincipalKey(b => b.UserNumber)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

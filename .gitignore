@@ -1,0 +1,11 @@
+## Ignore Visual Studio temporary files, build results, and other junk
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+library.db
+library.db-shm
+library.db-wal

@@ -4,6 +4,7 @@ namespace SarasaviLibrary.Models.Entities
 {
     public class BookCopy
     {
+        [System.ComponentModel.DataAnnotations.Key]
         public int CopyId { get; set; }
         public string AccessionNumber { get; set; } = string.Empty;
         public CopyStatus Status { get; set; }

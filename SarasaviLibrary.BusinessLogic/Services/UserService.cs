@@ -32,5 +32,11 @@ namespace SarasaviLibrary.BusinessLogic.Services
             
             return borrower;
         }
+
+        public System.Collections.Generic.List<Borrower> GetAllBorrowers()
+        {
+            using var context = new AppDbContext();
+            return context.Borrowers.ToList();
+        }
     }
 }

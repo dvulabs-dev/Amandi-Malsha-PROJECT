@@ -15,4 +15,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.0" />
   </ItemGroup>
+  <Target Name="UnblockOutputDlls" AfterTargets="Build">
+    <Exec Command="powershell -NoProfile -Command &quot;Get-ChildItem '$(OutDir)' -Recurse -Filter *.dll | Unblock-File&quot;" />
+  </Target>
+
 </Project>

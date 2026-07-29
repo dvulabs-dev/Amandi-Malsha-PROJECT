@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using SarasaviLibrary.BusinessLogic.Services;
+using SarasaviLibrary.Models.Enums;
 
 namespace SarasaviLibrary.UI.Forms
 {
@@ -25,18 +26,20 @@ namespace SarasaviLibrary.UI.Forms
                 }
 
                 int copies = (int)numCopies.Value;
+                BookType bookType = chkReferenceOnly.Checked ? BookType.ReferenceOnly : BookType.Borrowable;
                 
                 var title = _bookService.RegisterTitle(
                     txtISBN.Text,
                     txtName.Text,
                     txtAuthor.Text,
                     txtPublisher.Text,
-                    txtClassification.Text
+                    txtClassification.Text,
+                    bookType
                 );
 
                 if (copies > 0)
                 {
-                    _bookService.AddCopies(title.TitleId, copies, chkReferenceOnly.Checked);
+                    _bookService.AddCopies(title.TitleId, copies, bookType);
                 }
 
                 MessageBox.Show($"Title Registered Successfully!\nPrefix: {title.BookNumberPrefix}\nCopies Added: {copies}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);

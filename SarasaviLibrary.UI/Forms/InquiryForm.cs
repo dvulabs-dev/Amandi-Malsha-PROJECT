@@ -28,10 +28,13 @@ namespace SarasaviLibrary.UI.Forms
                 var results = _inquiryService.SearchCopies(txtSearch.Text);
                 
                 dgvResults.DataSource = results.Select(c => new {
-                    c.AccessionNumber,
-                    c.Title.Name,
-                    c.Title.AuthorNames,
-                    Status = c.Status.ToString()
+                    BookNumber    = c.AccessionNumber,
+                    Title         = c.Title.Name,
+                    Author        = c.Title.AuthorNames,
+                    Publisher     = c.Title.Publisher,
+                    Classification = c.Title.Classification,
+                    BookType      = c.Title.BookType.ToString(),
+                    Availability  = c.Status.ToString()
                 }).ToList();
             }
             catch (Exception ex)

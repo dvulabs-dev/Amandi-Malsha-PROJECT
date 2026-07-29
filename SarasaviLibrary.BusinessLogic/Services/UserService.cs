@@ -18,13 +18,19 @@ namespace SarasaviLibrary.BusinessLogic.Services
                 throw new Exception("A user with this National ID already exists.");
             }
             
+            // Generate a unique UserNumber (start at 1001, increment from max existing)
+            int nextUserNumber = context.People.Any()
+                ? context.People.Max(p => p.UserNumber) + 1
+                : 1001;
+
             var borrower = new Borrower
             {
                 Name = name,
                 Address = address,
                 Sex = sex,
                 NationalId = nationalId,
-                RegisteredDate = DateTime.Now
+                RegisteredDate = DateTime.Now,
+                UserNumber = nextUserNumber
             };
             
             context.Borrowers.Add(borrower);

@@ -8,7 +8,7 @@ namespace SarasaviLibrary.BusinessLogic.Services
 {
     public class BookService
     {
-        public Title RegisterTitle(string isbn, string name, string authorNames, string publisher, string classification)
+        public Title RegisterTitle(string isbn, string name, string authorNames, string publisher, string classification, BookType bookType)
         {
             using var context = new AppDbContext();
             
@@ -18,8 +18,7 @@ namespace SarasaviLibrary.BusinessLogic.Services
                 throw new Exception("A title with this ISBN already exists.");
             }
             
-            // The brief says classification is 1-byte (e.g. F) and we append 4 digits.
-            // Let's just generate the next number for this prefix.
+            // Generate book number prefix from classification (e.g. F0001)
             string prefix = classification.Length > 0 ? classification.Substring(0, 1).ToUpper() : "X";
             
             var existingPrefixCount = context.Titles.Count(t => t.BookNumberPrefix.StartsWith(prefix));
@@ -32,7 +31,8 @@ namespace SarasaviLibrary.BusinessLogic.Services
                 AuthorNames = authorNames,
                 Publisher = publisher,
                 Classification = classification,
-                BookNumberPrefix = newPrefix
+                BookNumberPrefix = newPrefix,
+                BookType = bookType
             };
             
             context.Titles.Add(title);
@@ -40,7 +40,7 @@ namespace SarasaviLibrary.BusinessLogic.Services
             return title;
         }
 
-        public void AddCopies(int titleId, int count, bool isReferenceOnly)
+        public void AddCopies(int titleId, int count, BookType bookType)
         {
             using var context = new AppDbContext();
             
@@ -48,6 +48,10 @@ namespace SarasaviLibrary.BusinessLogic.Services
             if (title == null) throw new Exception("Title not found.");
             
             var existingCopiesCount = context.BookCopies.Count(c => c.TitleId == titleId);
+            
+            CopyStatus copyStatus = bookType == BookType.ReferenceOnly
+                ? CopyStatus.ReferenceOnly
+                : CopyStatus.Available;
             
             for (int i = 1; i <= count; i++)
             {
@@ -57,7 +61,7 @@ namespace SarasaviLibrary.BusinessLogic.Services
                 {
                     TitleId = titleId,
                     AccessionNumber = accessionNumber,
-                    Status = isReferenceOnly ? CopyStatus.ReferenceOnly : CopyStatus.Available
+                    Status = copyStatus
                 };
                 context.BookCopies.Add(copy);
             }

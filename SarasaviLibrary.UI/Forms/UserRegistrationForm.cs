@@ -29,7 +29,7 @@ namespace SarasaviLibrary.UI.Forms
                 var borrower = _userService.RegisterBorrower(
                     txtName.Text,
                     txtAddress.Text,
-                    (Sex)cmbSex.SelectedItem,
+                    (Sex)(cmbSex.SelectedItem ?? Sex.Male),
                     txtNIC.Text
                 );
 

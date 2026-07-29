@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore;
 using SarasaviLibrary.DataAccess.Contexts;
 using SarasaviLibrary.Models.Enums;
 
@@ -126,7 +127,7 @@ namespace SarasaviLibrary.UI.Forms
             _lblStatReserved  = numLabels[5];
         }
 
-        /// <summary>Queries the database and updates all stat card numbers.</summary>
+        /// <summary>Queries the database and updates all stat card numbers, then reloads the tables.</summary>
         private void LoadDashboardStats()
         {
             try
@@ -147,6 +148,77 @@ namespace SarasaviLibrary.UI.Forms
             {
                 // Database not yet created on first run — values stay at "—"
             }
+
+            LoadDashboardTables();
+        }
+
+        /// <summary>Loads the Borrowers and Book Titles tables shown on the dashboard.</summary>
+        private void LoadDashboardTables()
+        {
+            try
+            {
+                using var ctx = new AppDbContext();
+
+                // ── Registered Borrowers ──────────────────────────────────
+                var borrowers = ctx.Borrowers
+                    .OrderByDescending(b => b.Id)
+                    .ToList()   // materialise before in-memory projection
+                    .Select(b => new
+                    {
+                        User_No  = b.UserNumber,
+                        Name     = b.Name,
+                        NIC      = b.NationalId,
+                        Gender   = b.Sex.ToString(),
+                        Address  = b.Address ?? "",
+                    })
+                    .ToList();
+
+                dgvBorrowers.DataSource = borrowers;
+
+                // Friendly column headers
+                if (dgvBorrowers.Columns.Count >= 5)
+                {
+                    dgvBorrowers.Columns[0].HeaderText = "User No.";
+                    dgvBorrowers.Columns[0].Width      = 80;
+                    dgvBorrowers.Columns[1].HeaderText = "Name";
+                    dgvBorrowers.Columns[2].HeaderText = "NIC";
+                    dgvBorrowers.Columns[3].HeaderText = "Gender";
+                    dgvBorrowers.Columns[3].Width      = 70;
+                    dgvBorrowers.Columns[4].HeaderText = "Address";
+                }
+
+                // ── Registered Book Titles ────────────────────────────────
+                var books = ctx.Titles
+                    .Include(t => t.Copies)
+                    .OrderByDescending(t => t.TitleId)
+                    .ToList()   // materialise before in-memory projection
+                    .Select(t => new
+                    {
+                        Book_No  = t.BookNumberPrefix ?? "",
+                        Title    = t.Name,
+                        Author   = t.AuthorNames ?? "",
+                        Publisher = t.Publisher ?? "",
+                        Type     = t.BookType.ToString(),
+                        Copies   = t.Copies.Count,
+                    })
+                    .ToList();
+
+                dgvBooks.DataSource = books;
+
+                if (dgvBooks.Columns.Count >= 6)
+                {
+                    dgvBooks.Columns[0].HeaderText = "Book No.";
+                    dgvBooks.Columns[0].Width      = 80;
+                    dgvBooks.Columns[1].HeaderText = "Title";
+                    dgvBooks.Columns[2].HeaderText = "Author";
+                    dgvBooks.Columns[3].HeaderText = "Publisher";
+                    dgvBooks.Columns[4].HeaderText = "Type";
+                    dgvBooks.Columns[4].Width      = 90;
+                    dgvBooks.Columns[5].HeaderText = "Copies";
+                    dgvBooks.Columns[5].Width      = 60;
+                }
+            }
+            catch { /* DB not yet initialised */ }
         }
 
         // ─────────────────────────────────────────────────────────────────

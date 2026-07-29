@@ -68,5 +68,11 @@ namespace SarasaviLibrary.BusinessLogic.Services
             
             context.SaveChanges();
         }
+
+        public System.Collections.Generic.List<Title> GetAllTitles()
+        {
+            using var context = new AppDbContext();
+            return context.Titles.ToList();
+        }
     }
 }

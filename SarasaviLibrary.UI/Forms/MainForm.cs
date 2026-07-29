@@ -1,5 +1,7 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
+using SarasaviLibrary.UI.Utilities;
 
 namespace SarasaviLibrary.UI.Forms
 {
@@ -9,6 +11,31 @@ namespace SarasaviLibrary.UI.Forms
         {
             InitializeComponent();
             IsMdiContainer = true;
+            this.Load += MainForm_Load;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // Style MenuStrip
+            menuStrip1.BackColor = ThemeUtility.ForegroundColor;
+            menuStrip1.ForeColor = Color.White;
+            menuStrip1.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            
+            // Style MdiClient background
+            foreach (Control control in this.Controls)
+            {
+                if (control is MdiClient client)
+                {
+                    client.BackColor = ThemeUtility.BackgroundColor;
+                    break;
+                }
+            }
+            
+            // Show Dashboard
+            var dashboard = new DashboardForm();
+            dashboard.MdiParent = this;
+            dashboard.Dock = DockStyle.Fill;
+            dashboard.Show();
         }
 
         private void ShowForm(Form form)

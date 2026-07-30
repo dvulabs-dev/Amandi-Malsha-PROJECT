@@ -28,17 +28,18 @@ namespace SarasaviLibrary.UI.Forms
                     return;
                 }
 
-                var results = _inquiryService.SearchCopies(txtSearch.Text);
+                var results = _inquiryService.SearchCopiesDetail(txtSearch.Text);
 
                 dgvResults.DataSource = results.Select(c => new
                 {
-                    BookNumber     = c.AccessionNumber,
-                    Title          = c.Title.Name,
-                    Author         = c.Title.AuthorNames,
-                    Publisher      = c.Title.Publisher,
-                    Classification = c.Title.Classification,
-                    BookType       = c.Title.BookType.ToString(),
-                    Availability   = c.Status.ToString()
+                    BookNumber     = c.BookNumber,
+                    Title          = c.Title,
+                    Author         = c.Author,
+                    Publisher      = c.Publisher,
+                    Classification = c.Classification,
+                    BookType       = c.BookType,
+                    Availability   = c.Availability,
+                    BorrowedByUserId = c.BorrowedByUserId   // empty when not on loan
                 }).ToList();
             }
             catch (Exception ex)

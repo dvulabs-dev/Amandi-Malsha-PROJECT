@@ -9,6 +9,22 @@ using SarasaviLibrary.Models.Enums;
 namespace SarasaviLibrary.BusinessLogic.Services
 {
     /// <summary>
+    /// DTO for a single book copy row in search results, including optional borrower info.
+    /// </summary>
+    public class BookCopyRow
+    {
+        public string BookNumber      { get; set; } = string.Empty;
+        public string Title           { get; set; } = string.Empty;
+        public string Author          { get; set; } = string.Empty;
+        public string Publisher       { get; set; } = string.Empty;
+        public string Classification  { get; set; } = string.Empty;
+        public string BookType        { get; set; } = string.Empty;
+        public string Availability    { get; set; } = string.Empty;
+        /// <summary>UserNumber of the borrower who currently has this copy on loan. Empty if not on loan.</summary>
+        public string BorrowedByUserId { get; set; } = string.Empty;
+    }
+
+    /// <summary>
     /// DTO returned by SearchBorrower – flat data ready for UI display.
     /// </summary>
     public class BorrowerLoanRow
@@ -55,6 +71,42 @@ namespace SarasaviLibrary.BusinessLogic.Services
                 .ToList();
                 
             return results;
+        }
+
+        /// <summary>
+        /// Same as SearchCopies but also includes the UserNumber of whoever
+        /// currently has each copy on loan (empty string if not on loan).
+        /// </summary>
+        public List<BookCopyRow> SearchCopiesDetail(string query)
+        {
+            using var context = new AppDbContext();
+
+            var copies = context.BookCopies
+                .Include(c => c.Title)
+                .Where(c => c.AccessionNumber.Contains(query) ||
+                            c.Title.Name.Contains(query) ||
+                            c.Title.AuthorNames.Contains(query))
+                .ToList();
+
+            // Build a lookup: CopyId → UserNumber for all active loans
+            var copyIds = copies.Select(c => c.CopyId).ToList();
+            var activeLoanMap = context.Loans
+                .Where(l => copyIds.Contains(l.CopyId) && l.Status == LoanStatus.Active)
+                .ToDictionary(l => l.CopyId, l => l.UserNumber);
+
+            return copies.Select(c => new BookCopyRow
+            {
+                BookNumber      = c.AccessionNumber,
+                Title           = c.Title.Name,
+                Author          = c.Title.AuthorNames,
+                Publisher       = c.Title.Publisher,
+                Classification  = c.Title.Classification,
+                BookType        = c.Title.BookType.ToString(),
+                Availability    = c.Status.ToString(),
+                BorrowedByUserId = activeLoanMap.TryGetValue(c.CopyId, out int uid)
+                                    ? uid.ToString()
+                                    : string.Empty
+            }).ToList();
         }
 
         /// <summary>

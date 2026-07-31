@@ -1,4 +1,4 @@
-﻿namespace SarasaviLibrary.UI.Forms
+namespace SarasaviLibrary.UI.Forms
 {
     partial class MainForm
     {
@@ -61,14 +61,14 @@
             this.lblLibraryName.Text      = "SARASAVI";
             this.lblLibraryName.Font      = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblLibraryName.ForeColor = System.Drawing.Color.White;
-            this.lblLibraryName.Location  = new System.Drawing.Point(14, 16);
+            this.lblLibraryName.Location  = new System.Drawing.Point(75, 16);
             this.lblLibraryName.Size      = new System.Drawing.Size(204, 30);
 
             this.lblLibrarySub.AutoSize  = false;
             this.lblLibrarySub.Text      = "Library Management System";
             this.lblLibrarySub.Font      = new System.Drawing.Font("Segoe UI", 7.5F);
             this.lblLibrarySub.ForeColor = System.Drawing.Color.FromArgb(148, 163, 184);
-            this.lblLibrarySub.Location  = new System.Drawing.Point(14, 50);
+            this.lblLibrarySub.Location  = new System.Drawing.Point(75, 50);
             this.lblLibrarySub.Size      = new System.Drawing.Size(204, 18);
 
             // Exit bottom panel
@@ -102,9 +102,10 @@
             this.pnlNavContainer.Controls.Add(this.lblNavSectionReg);
             this.pnlNavContainer.Controls.Add(this.btnNavDashboard);
 
-            void StyleNav(System.Windows.Forms.Button btn, string text, int y, System.EventHandler handler)
+            void StyleNav(System.Windows.Forms.Button btn, string icon, string text, int y, System.EventHandler handler)
             {
-                btn.Text      = text;
+                btn.Tag       = icon + "|" + text;
+                btn.Text      = text; // Will be hidden in MainForm.cs
                 btn.Location  = new System.Drawing.Point(0, y);
                 btn.Size      = new System.Drawing.Size(232, 44);
                 btn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -123,19 +124,19 @@
                 lbl.Text      = text;
                 lbl.Font      = new System.Drawing.Font("Segoe UI", 7F, System.Drawing.FontStyle.Bold);
                 lbl.ForeColor = System.Drawing.Color.FromArgb(99, 130, 190);
-                lbl.Location  = new System.Drawing.Point(16, y);
+                lbl.Location  = new System.Drawing.Point(85, y);
                 lbl.Size      = new System.Drawing.Size(200, 20);
             }
 
-            StyleNav(this.btnNavDashboard,    "   🏠   Dashboard",          8,   this.btnNavDashboard_Click);
+            StyleNav(this.btnNavDashboard,    "🏠", "Dashboard",          8,   this.btnNavDashboard_Click);
             StyleSection(this.lblNavSectionReg, "REGISTRATION",              60);
-            StyleNav(this.btnNavRegisterUser, "    Register Borrower",   82,  this.btnNavRegisterUser_Click);
-            StyleNav(this.btnNavRegisterBook, "    Register Book",        126, this.btnNavRegisterBook_Click);
+            StyleNav(this.btnNavRegisterUser, "👥", "Register Borrower",   82,  this.btnNavRegisterUser_Click);
+            StyleNav(this.btnNavRegisterBook, "📚", "Register Book",        126, this.btnNavRegisterBook_Click);
             StyleSection(this.lblNavSectionTrans, "TRANSACTIONS",             178);
-            StyleNav(this.btnNavLoan,         "   📖   Loan Book",            198, this.btnNavLoan_Click);
-            StyleNav(this.btnNavReturn,       "   ↩   Return Book",           242, this.btnNavReturn_Click);
-            StyleNav(this.btnNavReserve,      "   🔖   Reserve Book",         286, this.btnNavReserve_Click);
-            StyleNav(this.btnNavInquiry,      "    Book Inquiry",         330, this.btnNavInquiry_Click);
+            StyleNav(this.btnNavLoan,         "📖", "Loan Book",            198, this.btnNavLoan_Click);
+            StyleNav(this.btnNavReturn,       "↩", "Return Book",           242, this.btnNavReturn_Click);
+            StyleNav(this.btnNavReserve,      "🔖", "Reserve Book",         286, this.btnNavReserve_Click);
+            StyleNav(this.btnNavInquiry,      "🔍", "Book Inquiry",         330, this.btnNavInquiry_Click);
 
             // ══════════════════════════════════════════════════════════════
             // MAIN AREA

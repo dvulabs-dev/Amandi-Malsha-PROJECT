@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -17,8 +17,8 @@ namespace SarasaviLibrary.UI.Forms
             _inquiryService = new InquiryService();
             this.Load += InquiryForm_Load;
             
-            pnlLeft.Paint += pnlHalf_Paint;
-            pnlRight.Paint += pnlHalf_Paint;
+            pnlBookCard.Paint += pnlHalf_Paint;
+            pnlBorrowerCard.Paint += pnlHalf_Paint;
         }
 
         private void InquiryForm_Load(object? sender, EventArgs e)
@@ -26,13 +26,14 @@ namespace SarasaviLibrary.UI.Forms
             this.BackColor = Color.FromArgb(245, 247, 250); // Dashboard grey
             this.Padding = new Padding(25); // Gap from navbar and edges
             
-            pnlLeft.BackColor = Color.Transparent;
-            pnlRight.BackColor = Color.Transparent;
+            pnlBookCard.BackColor = Color.Transparent;
+            pnlBorrowerCard.BackColor = Color.Transparent;
 
-            lblBookTitle.ForeColor = Color.White;
+            lblBookTitle.ForeColor = Color.FromArgb(41, 54, 129);
             lblBorrowerTitle.ForeColor = Color.FromArgb(41, 54, 129);
             
             // Buttons
+            btnBookSearch.BackColor = Color.FromArgb(16, 185, 129);
             btnBorrowerSearch.BackColor = Color.FromArgb(16, 185, 129); // Green pill button
 
             SetupGrids();
@@ -47,6 +48,7 @@ namespace SarasaviLibrary.UI.Forms
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Title", HeaderText = "TITLE", Name = "Title", Width = 150 });
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Author", HeaderText = "AUTHOR", Name = "Author", Width = 120 });
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Availability", HeaderText = "AVAILABILITY", Name = "Availability", Width = 110 });
+            dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BorrowedByUserId", HeaderText = "BORROWER ID", Name = "BorrowedByUserId", Width = 110 });
 
             // Borrower Loans Grid
             dgvBorrowerLoans.AutoGenerateColumns = false;
@@ -84,7 +86,7 @@ namespace SarasaviLibrary.UI.Forms
             var rect = new Rectangle(0, 0, pnl.Width - 1, pnl.Height - 1);
             int radius = 30; // Large rounded corners for the main splits
             
-            Color bgColor = pnl == pnlLeft ? Color.FromArgb(41, 54, 129) : Color.FromArgb(235, 240, 245);
+            Color bgColor = Color.FromArgb(235, 240, 245);
             
             using (var path = GetRoundedRect(rect, radius))
             using (var brush = new SolidBrush(bgColor))
@@ -311,16 +313,41 @@ namespace SarasaviLibrary.UI.Forms
 
                 dgvBookResults.DataSource = results.Select(c => new
                 {
-                    BookNumber     = c.BookNumber,
-                    Title          = c.Title,
-                    Author         = c.Author,
-                    Availability   = c.Availability
+                    BookNumber       = c.BookNumber,
+                    Title            = c.Title,
+                    Author           = c.Author,
+                    Availability     = c.Availability,
+                    BorrowedByUserId = c.BorrowedByUserId
                 }).ToList();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnToggleBook_Click(object? sender, EventArgs e)
+        {
+            pnlBookCard.Visible = true;
+            pnlBorrowerCard.Visible = false;
+            
+            btnToggleBook.BackColor = Color.FromArgb(41, 54, 129);
+            btnToggleBook.ForeColor = Color.White;
+            
+            btnToggleBorrower.BackColor = Color.FromArgb(230, 235, 240);
+            btnToggleBorrower.ForeColor = Color.FromArgb(100, 116, 139);
+        }
+
+        private void btnToggleBorrower_Click(object? sender, EventArgs e)
+        {
+            pnlBookCard.Visible = false;
+            pnlBorrowerCard.Visible = true;
+            
+            btnToggleBorrower.BackColor = Color.FromArgb(41, 54, 129);
+            btnToggleBorrower.ForeColor = Color.White;
+            
+            btnToggleBook.BackColor = Color.FromArgb(230, 235, 240);
+            btnToggleBook.ForeColor = Color.FromArgb(100, 116, 139);
         }
 
         private void btnBorrowerSearch_Click(object sender, EventArgs e)

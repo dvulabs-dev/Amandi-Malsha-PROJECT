@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -49,22 +49,23 @@ namespace SarasaviLibrary.UI.Forms
             pnlNavContainer.BackColor = Color.Transparent;
             pnlNavBottom.BackColor = Color.Transparent;
             
+            int leftStripWidth = 60;
+            Color leftStripColor = Color.FromArgb(99, 102, 241);
+            Color rightStripColor = Color.FromArgb(67, 56, 202);
+            
             pnlSidebar.Paint += (s, e) => {
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-                e.Graphics.Clear(Color.FromArgb(245, 247, 250)); // Form Background
                 
-                var path = new GraphicsPath();
-                int r = 30; // Radius for top and bottom right corners
-                path.AddLine(0, 0, pnlSidebar.Width - r, 0);
-                path.AddArc(pnlSidebar.Width - r, 0, r, r, 270, 90);
-                path.AddLine(pnlSidebar.Width, r, pnlSidebar.Width, pnlSidebar.Height - r);
-                path.AddArc(pnlSidebar.Width - r, pnlSidebar.Height - r, r, r, 0, 90);
-                path.AddLine(pnlSidebar.Width - r, pnlSidebar.Height, 0, pnlSidebar.Height);
-                path.CloseFigure();
-                
-                using (var brush = new SolidBrush(darkBlue))
+                // Fill left strip
+                using (var brush = new SolidBrush(leftStripColor))
                 {
-                    e.Graphics.FillPath(brush, path);
+                    e.Graphics.FillRectangle(brush, 0, 0, leftStripWidth, pnlSidebar.Height);
+                }
+                
+                // Fill right strip
+                using (var brush = new SolidBrush(rightStripColor))
+                {
+                    e.Graphics.FillRectangle(brush, leftStripWidth, 0, pnlSidebar.Width - leftStripWidth, pnlSidebar.Height);
                 }
             };
 
@@ -80,7 +81,6 @@ namespace SarasaviLibrary.UI.Forms
                 btn.Location = new Point(0, y);
                 btn.BackColor = Color.Transparent;
                 btn.ForeColor = Color.Transparent; 
-                btn.Tag = btn.Text;
                 btn.Text = string.Empty; // Hide native text perfectly
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.FlatAppearance.BorderSize = 0;
@@ -112,16 +112,16 @@ namespace SarasaviLibrary.UI.Forms
                 // Header
                 using (var font = new Font("Segoe UI", 11, FontStyle.Bold))
                 {
-                    e.Graphics.DrawString(DateTime.Now.ToString("MMMM yyyy"), font, Brushes.White, new Point(rect.X + 15, rect.Y + 15));
+                    e.Graphics.DrawString(DateTime.Now.ToString("MMMM yyyy"), font, Brushes.White, new Point(rect.X + 65, rect.Y + 15));
                 }
                 
                 // Calendar Grid
                 using (var font = new Font("Segoe UI", 8, FontStyle.Regular))
                 {
                     string[] dows = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
-                    int stepX = (rect.Width - 30) / 7;
+                    int stepX = (rect.Width - 80) / 7;
                     for (int i = 0; i < 7; i++) {
-                        e.Graphics.DrawString(dows[i], font, new SolidBrush(Color.FromArgb(180, 255, 255, 255)), new Point(rect.X + 15 + stepX * i, rect.Y + 45));
+                        e.Graphics.DrawString(dows[i], font, new SolidBrush(Color.FromArgb(180, 255, 255, 255)), new Point(rect.X + 65 + stepX * i, rect.Y + 45));
                     }
                     
                     using (var dayFont = new Font("Segoe UI", 9, FontStyle.Bold))
@@ -136,7 +136,7 @@ namespace SarasaviLibrary.UI.Forms
                                 if (row == 0 && col < startDayIndex) continue;
                                 if (day > daysInMonth) break;
                                 
-                                int x = rect.X + 15 + stepX * col;
+                                int x = rect.X + 65 + stepX * col;
                                 int y = rect.Y + 70 + (row * 24);
                                 
                                 if (day == DateTime.Now.Day) {
@@ -149,6 +149,30 @@ namespace SarasaviLibrary.UI.Forms
                             }
                         }
                     }
+                }
+            };
+            
+            btnNavExit.Text = "";
+            btnNavExit.Paint += (s, e) => {
+                var btn = s as Button;
+                if (btn == null) return;
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                int leftStripWidth = 60;
+                
+                string icon = "🚪";
+                string text = "Log Out";
+                
+                using (var font = new Font("Segoe UI Emoji", 14F))
+                {
+                    var sz = e.Graphics.MeasureString(icon, font);
+                    float ix = (leftStripWidth - sz.Width) / 2;
+                    float iy = (btn.Height - sz.Height) / 2;
+                    TextRenderer.DrawText(e.Graphics, icon, font, new Point((int)ix, (int)iy), Color.FromArgb(252, 165, 165));
+                }
+
+                using (var font = new Font("Segoe UI", 10.5F, FontStyle.Regular))
+                {
+                    TextRenderer.DrawText(e.Graphics, text, font, new Point(leftStripWidth + 25, (btn.Height - font.Height) / 2), Color.FromArgb(252, 165, 165));
                 }
             };
             
@@ -345,43 +369,78 @@ namespace SarasaviLibrary.UI.Forms
             Button? btn = sender as Button;
             if (btn == null) return;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            // Background is drawn by sidebar Paint, we just need to avoid clearing with a solid color.
-            // If active, it draws the pill. If not, just text.
 
-            int margin = 20;
-            int rightMargin = 20;
+            int leftStripWidth = 60;
+            string icon = "";
+            string text = "";
+            
+            if (btn.Tag != null)
+            {
+                var parts = btn.Tag.ToString().Split('|');
+                if (parts.Length == 2)
+                {
+                    icon = parts[0];
+                    text = parts[1];
+                }
+                else
+                {
+                    text = btn.Tag.ToString();
+                }
+            }
 
             if (btn == _activeNavButton)
             {
-                int r = 16;
-                var rect = new Rectangle(margin, 10, btn.Width - margin - rightMargin, btn.Height - 20);
-                var path = GetRoundedRect(rect, r);
+                // Active tab: cutout effect on the right strip
+                int r = 20; // Corner radius
                 
-                using (var brush = new SolidBrush(Color.FromArgb(241, 245, 249)))
+                var path = new GraphicsPath();
+                // We want the white background to start at leftStripWidth and go to btn.Width
+                // with rounded top-left and bottom-left corners.
+                var rect = new Rectangle(leftStripWidth, 5, btn.Width - leftStripWidth, btn.Height - 10);
+                
+                path.AddArc(rect.X, rect.Y, r, r, 180, 90);
+                path.AddLine(rect.X + r, rect.Y, rect.Right, rect.Y);
+                path.AddLine(rect.Right, rect.Bottom, rect.X + r, rect.Bottom);
+                path.AddArc(rect.X, rect.Bottom - r, r, r, 90, 90);
+                path.CloseFigure();
+                
+                using (var brush = new SolidBrush(Color.FromArgb(241, 245, 249))) // Match main form background
                 {
                     e.Graphics.FillPath(brush, path);
                 }
 
-                int pillHeight = 22;
-                int pillY = (btn.Height - pillHeight) / 2;
-                var pillPath = new GraphicsPath();
-                pillPath.AddArc(margin + 10, pillY, 6, 6, 180, 180);
-                pillPath.AddArc(margin + 10, pillY + pillHeight - 6, 6, 6, 0, 180);
-                pillPath.CloseFigure();
-                using (var brush = new SolidBrush(Color.FromArgb(250, 204, 21))) { e.Graphics.FillPath(brush, pillPath); }
-
-                string text = btn.Tag?.ToString() ?? "";
-                using (var font = new Font("Segoe UI", 10.5F, FontStyle.Bold))
+                // Draw Icon on the left strip
+                using (var font = new Font("Segoe UI Emoji", 14F))
                 {
-                    TextRenderer.DrawText(e.Graphics, text, font, new Point(margin + 40, (btn.Height - font.Height) / 2), Color.FromArgb(30, 41, 59));
+                    var sz = e.Graphics.MeasureString(icon, font);
+                    float ix = (leftStripWidth - sz.Width) / 2;
+                    float iy = (btn.Height - sz.Height) / 2;
+                    TextRenderer.DrawText(e.Graphics, icon, font, new Point((int)ix, (int)iy), Color.White);
+                }
+
+                // Draw Text on the right strip
+                using (var font = new Font("Segoe UI", 11F, FontStyle.Bold))
+                {
+                    TextRenderer.DrawText(e.Graphics, text, font, new Point(leftStripWidth + 25, (btn.Height - font.Height) / 2), Color.FromArgb(30, 41, 59));
                 }
             }
             else
             {
-                string text = btn.Tag?.ToString() ?? "";
+                // Inactive tab
+                
+                // Draw Icon on the left strip
+                using (var font = new Font("Segoe UI Emoji", 14F))
+                {
+                    var sz = e.Graphics.MeasureString(icon, font);
+                    float ix = (leftStripWidth - sz.Width) / 2;
+                    float iy = (btn.Height - sz.Height) / 2;
+                    TextRenderer.DrawText(e.Graphics, icon, font, new Point((int)ix, (int)iy), Color.FromArgb(200, 200, 255)); // Slightly dimmed
+                }
+
+                // Draw Text on the right strip
                 using (var font = new Font("Segoe UI", 10.5F, FontStyle.Regular))
                 {
-                    TextRenderer.DrawText(e.Graphics, text, font, new Point(margin + 40, (btn.Height - font.Height) / 2), Color.FromArgb(191, 219, 254));
+                    TextRenderer.DrawText(e.Graphics, text, font, new Point(leftStripWidth + 25, (btn.Height - font.Height) / 2), Color.White);
                 }
             }
         }

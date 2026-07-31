@@ -1,4 +1,4 @@
-﻿namespace SarasaviLibrary.UI.Forms
+namespace SarasaviLibrary.UI.Forms
 {
     partial class InquiryForm
     {
@@ -6,400 +6,487 @@
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null)) components.Dispose();
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
             base.Dispose(disposing);
         }
 
         private void InitializeComponent()
         {
-            this.pnlHeader       = new System.Windows.Forms.Panel();
-            this.lblTitle        = new System.Windows.Forms.Label();
-            this.lblSubtitle     = new System.Windows.Forms.Label();
-            this.pnlBody         = new System.Windows.Forms.Panel();
-
-            // ── Book Search (TOP) ──
-            this.pnlSearch       = new System.Windows.Forms.Panel();
-            this.lblSearch       = new System.Windows.Forms.Label();
-            this.txtSearch       = new System.Windows.Forms.TextBox();
-            this.btnSearch       = new System.Windows.Forms.Button();
-            this.lblHint         = new System.Windows.Forms.Label();
-            this.dgvResults      = new System.Windows.Forms.DataGridView();
-
-            // ── Borrower Search (BOTTOM) ──
-            this.pnlBorrowerSection  = new System.Windows.Forms.Panel();
-            this.pnlBorrowerHeader   = new System.Windows.Forms.Panel();
-            this.lblBorrowerSectionTitle = new System.Windows.Forms.Label();
-            this.pnlBorrowerSearch   = new System.Windows.Forms.Panel();
-            this.lblBorrowerSearch   = new System.Windows.Forms.Label();
-            this.txtBorrowerSearch   = new System.Windows.Forms.TextBox();
-            this.btnBorrowerSearch   = new System.Windows.Forms.Button();
-            this.lblBorrowerHint     = new System.Windows.Forms.Label();
-
-            // Profile card
-            this.pnlProfile          = new System.Windows.Forms.Panel();
-            this.lblProfileName      = new System.Windows.Forms.Label();
-            this.lblProfileUserNo    = new System.Windows.Forms.Label();
-            this.lblProfileNid       = new System.Windows.Forms.Label();
-            this.lblProfileAddress   = new System.Windows.Forms.Label();
-            this.lblProfileSex       = new System.Windows.Forms.Label();
-            this.lblProfileRegDate   = new System.Windows.Forms.Label();
-            this.pnlStats            = new System.Windows.Forms.Panel();
-            this.lblStatTotal        = new System.Windows.Forms.Label();
-            this.lblStatActive       = new System.Windows.Forms.Label();
-            this.lblStatOverdue      = new System.Windows.Forms.Label();
-
-            // Loans grid
-            this.dgvLoans            = new System.Windows.Forms.DataGridView();
-
-            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLoans)).BeginInit();
-            this.pnlHeader.SuspendLayout();
-            this.pnlBody.SuspendLayout();
-            this.pnlSearch.SuspendLayout();
-            this.pnlBorrowerSection.SuspendLayout();
-            this.pnlBorrowerHeader.SuspendLayout();
-            this.pnlBorrowerSearch.SuspendLayout();
-            this.pnlProfile.SuspendLayout();
-            this.pnlStats.SuspendLayout();
+            this.pnlContent = new System.Windows.Forms.Panel();
+            this.pnlToggle = new System.Windows.Forms.Panel();
+            this.btnToggleBook = new System.Windows.Forms.Button();
+            this.btnToggleBorrower = new System.Windows.Forms.Button();
+            this.pnlBookCard = new System.Windows.Forms.Panel();
+            this.dgvBookResults = new System.Windows.Forms.DataGridView();
+            this.btnBookSearch = new System.Windows.Forms.Button();
+            this.pnlBookSearchContainer = new System.Windows.Forms.Panel();
+            this.txtBookSearch = new System.Windows.Forms.TextBox();
+            this.lblBookTitle = new System.Windows.Forms.Label();
+            this.pnlBorrowerCard = new System.Windows.Forms.Panel();
+            this.dgvBorrowerLoans = new System.Windows.Forms.DataGridView();
+            this.pnlProfileStats = new System.Windows.Forms.Panel();
+            this.lblStatOverdue = new System.Windows.Forms.Label();
+            this.lblStatActive = new System.Windows.Forms.Label();
+            this.lblStatTotal = new System.Windows.Forms.Label();
+            this.lblProfileRegDate = new System.Windows.Forms.Label();
+            this.lblProfileSex = new System.Windows.Forms.Label();
+            this.lblProfileAddress = new System.Windows.Forms.Label();
+            this.lblProfileNid = new System.Windows.Forms.Label();
+            this.lblProfileUserNo = new System.Windows.Forms.Label();
+            this.lblProfileName = new System.Windows.Forms.Label();
+            this.btnBorrowerSearch = new System.Windows.Forms.Button();
+            this.pnlBorrowerSearchContainer = new System.Windows.Forms.Panel();
+            this.txtBorrowerSearch = new System.Windows.Forms.TextBox();
+            this.lblBorrowerTitle = new System.Windows.Forms.Label();
+            
+            this.pnlContent.SuspendLayout();
+            this.pnlToggle.SuspendLayout();
+            this.pnlBookCard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBookResults)).BeginInit();
+            this.pnlBookSearchContainer.SuspendLayout();
+            this.pnlBorrowerCard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowerLoans)).BeginInit();
+            this.pnlProfileStats.SuspendLayout();
+            this.pnlBorrowerSearchContainer.SuspendLayout();
             this.SuspendLayout();
 
-            // ════════════════════════════════════════════════════════════
-            // HEADER
-            // ════════════════════════════════════════════════════════════
-            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(30, 58, 138);
-            this.pnlHeader.Dock      = System.Windows.Forms.DockStyle.Top;
-            this.pnlHeader.Height    = 72;
-            this.pnlHeader.Controls.Add(this.lblTitle);
-            this.pnlHeader.Controls.Add(this.lblSubtitle);
+            //
+            // pnlContent
+            //
+            this.pnlContent.Controls.Add(this.pnlBorrowerCard);
+            this.pnlContent.Controls.Add(this.pnlBookCard);
+            this.pnlContent.Controls.Add(this.pnlToggle);
+            this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlContent.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
 
-            this.lblTitle.Text      = "Book & Borrower Inquiry";
-            this.lblTitle.Font      = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.ForeColor = System.Drawing.Color.White;
-            this.lblTitle.Location  = new System.Drawing.Point(18, 10);
-            this.lblTitle.Size      = new System.Drawing.Size(900, 28);
-            this.lblTitle.AutoSize  = false;
+            // 
+            // pnlToggle
+            // 
+            this.pnlToggle.Controls.Add(this.btnToggleBook);
+            this.pnlToggle.Controls.Add(this.btnToggleBorrower);
+            this.pnlToggle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlToggle.Location = new System.Drawing.Point(0, 0);
+            this.pnlToggle.Name = "pnlToggle";
+            this.pnlToggle.Size = new System.Drawing.Size(1000, 60);
+            this.pnlToggle.TabIndex = 0;
 
-            this.lblSubtitle.Text      = "Top: Search books by title / accession number   |   Bottom: Look up borrower by User Number or National ID";
-            this.lblSubtitle.Font      = new System.Drawing.Font("Segoe UI", 8.5F);
-            this.lblSubtitle.ForeColor = System.Drawing.Color.FromArgb(180, 210, 255);
-            this.lblSubtitle.Location  = new System.Drawing.Point(20, 42);
-            this.lblSubtitle.Size      = new System.Drawing.Size(900, 18);
-            this.lblSubtitle.AutoSize  = false;
+            // 
+            // btnToggleBook
+            // 
+            this.btnToggleBook.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(54)))), ((int)(((byte)(129)))));
+            this.btnToggleBook.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnToggleBook.FlatAppearance.BorderSize = 0;
+            this.btnToggleBook.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnToggleBook.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnToggleBook.ForeColor = System.Drawing.Color.White;
+            this.btnToggleBook.Location = new System.Drawing.Point(20, 0);
+            this.btnToggleBook.Name = "btnToggleBook";
+            this.btnToggleBook.Size = new System.Drawing.Size(200, 50);
+            this.btnToggleBook.TabIndex = 0;
+            this.btnToggleBook.Text = "📚 Book Inquiry";
+            this.btnToggleBook.UseVisualStyleBackColor = false;
+            this.btnToggleBook.Click += new System.EventHandler(this.btnToggleBook_Click);
+            this.btnToggleBook.Paint += new System.Windows.Forms.PaintEventHandler(this.RoundedButton_Paint);
 
-            // ════════════════════════════════════════════════════════════
-            // BOOK SEARCH — top section
-            // ════════════════════════════════════════════════════════════
-            this.pnlSearch.BackColor = System.Drawing.Color.FromArgb(235, 240, 250);
-            this.pnlSearch.Dock      = System.Windows.Forms.DockStyle.Top;
-            this.pnlSearch.Height    = 64;
-            this.pnlSearch.Controls.Add(this.lblHint);
-            this.pnlSearch.Controls.Add(this.btnSearch);
-            this.pnlSearch.Controls.Add(this.txtSearch);
-            this.pnlSearch.Controls.Add(this.lblSearch);
+            // 
+            // btnToggleBorrower
+            // 
+            this.btnToggleBorrower.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(235)))), ((int)(((byte)(240)))));
+            this.btnToggleBorrower.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnToggleBorrower.FlatAppearance.BorderSize = 0;
+            this.btnToggleBorrower.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnToggleBorrower.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnToggleBorrower.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(116)))), ((int)(((byte)(139)))));
+            this.btnToggleBorrower.Location = new System.Drawing.Point(230, 0);
+            this.btnToggleBorrower.Name = "btnToggleBorrower";
+            this.btnToggleBorrower.Size = new System.Drawing.Size(200, 50);
+            this.btnToggleBorrower.TabIndex = 1;
+            this.btnToggleBorrower.Text = "👥 Borrower Inquiry";
+            this.btnToggleBorrower.UseVisualStyleBackColor = false;
+            this.btnToggleBorrower.Click += new System.EventHandler(this.btnToggleBorrower_Click);
+            this.btnToggleBorrower.Paint += new System.Windows.Forms.PaintEventHandler(this.RoundedButton_Paint);
 
-            this.lblSearch.AutoSize  = false;
-            this.lblSearch.Text      = "Book Search (by title, author, or accession number):";
-            this.lblSearch.Font      = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblSearch.ForeColor = System.Drawing.Color.FromArgb(30, 58, 138);
-            this.lblSearch.Location  = new System.Drawing.Point(14, 8);
-            this.lblSearch.Size      = new System.Drawing.Size(400, 18);
+            // 
+            // pnlBookCard
+            // 
+            this.pnlBookCard.BackColor = System.Drawing.Color.Transparent;
+            this.pnlBookCard.Controls.Add(this.dgvBookResults);
+            this.pnlBookCard.Controls.Add(this.btnBookSearch);
+            this.pnlBookCard.Controls.Add(this.pnlBookSearchContainer);
+            this.pnlBookCard.Controls.Add(this.lblBookTitle);
+            this.pnlBookCard.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBookCard.Location = new System.Drawing.Point(20, 80);
+            this.pnlBookCard.Name = "pnlBookCard";
+            this.pnlBookCard.Padding = new System.Windows.Forms.Padding(20);
+            this.pnlBookCard.Size = new System.Drawing.Size(1060, 700);
+            this.pnlBookCard.TabIndex = 1;
 
-            this.txtSearch.Name        = "txtSearch";
-            this.txtSearch.Font        = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtSearch.Location    = new System.Drawing.Point(14, 28);
-            this.txtSearch.Size        = new System.Drawing.Size(540, 26);
-            this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSearch.TabIndex    = 1;
-
-            this.btnSearch.Name             = "btnSearch";
-            this.btnSearch.Text             = " Search";
-            this.btnSearch.Font             = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnSearch.BackColor        = System.Drawing.Color.FromArgb(30, 58, 138);
-            this.btnSearch.ForeColor        = System.Drawing.Color.White;
-            this.btnSearch.FlatStyle        = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSearch.FlatAppearance.BorderSize = 0;
-            this.btnSearch.Location         = new System.Drawing.Point(562, 26);
-            this.btnSearch.Size             = new System.Drawing.Size(100, 28);
-            this.btnSearch.Cursor           = System.Windows.Forms.Cursors.Hand;
-            this.btnSearch.TabIndex         = 2;
-            this.btnSearch.Click           += new System.EventHandler(this.btnSearch_Click);
-
-            this.lblHint.AutoSize  = false;
-            this.lblHint.Text      = "Returns all matching copies with availability.";
-            this.lblHint.Font      = new System.Drawing.Font("Segoe UI", 7.5F, System.Drawing.FontStyle.Italic);
-            this.lblHint.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
-            this.lblHint.Location  = new System.Drawing.Point(672, 34);
-            this.lblHint.Size      = new System.Drawing.Size(270, 16);
-
-            // Book results grid
-            this.dgvResults.Name                  = "dgvResults";
-            this.dgvResults.Dock                  = System.Windows.Forms.DockStyle.Top;
-            this.dgvResults.Height                = 200;
-            this.dgvResults.ReadOnly              = true;
-            this.dgvResults.AllowUserToAddRows    = false;
-            this.dgvResults.AllowUserToDeleteRows = false;
-            this.dgvResults.SelectionMode         = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvResults.AutoSizeColumnsMode   = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvResults.RowHeadersVisible     = false;
-            this.dgvResults.Font                  = new System.Drawing.Font("Segoe UI", 9F);
-            this.dgvResults.BackgroundColor       = System.Drawing.Color.White;
-            this.dgvResults.BorderStyle           = System.Windows.Forms.BorderStyle.None;
-            this.dgvResults.GridColor             = System.Drawing.Color.FromArgb(220, 225, 235);
-            this.dgvResults.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(30, 58, 138);
-            this.dgvResults.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvResults.ColumnHeadersDefaultCellStyle.Font      = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.dgvResults.EnableHeadersVisualStyles = false;
-            this.dgvResults.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(240, 245, 255);
-            this.dgvResults.TabIndex = 3;
-
-            // ════════════════════════════════════════════════════════════
-            // BORROWER SECTION — bottom
-            // ════════════════════════════════════════════════════════════
-
-            // Section header bar
-            this.pnlBorrowerHeader.BackColor = System.Drawing.Color.FromArgb(15, 118, 110);
-            this.pnlBorrowerHeader.Dock      = System.Windows.Forms.DockStyle.Top;
-            this.pnlBorrowerHeader.Height    = 34;
-            this.pnlBorrowerHeader.Controls.Add(this.lblBorrowerSectionTitle);
-
-            this.lblBorrowerSectionTitle.Text      = "Borrower Lookup — search by User Number or National ID";
-            this.lblBorrowerSectionTitle.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblBorrowerSectionTitle.ForeColor = System.Drawing.Color.White;
-            this.lblBorrowerSectionTitle.Location  = new System.Drawing.Point(12, 8);
-            this.lblBorrowerSectionTitle.Size      = new System.Drawing.Size(900, 20);
-            this.lblBorrowerSectionTitle.AutoSize  = false;
-
-            // Borrower search bar
-            this.pnlBorrowerSearch.BackColor = System.Drawing.Color.FromArgb(240, 253, 250);
-            this.pnlBorrowerSearch.Dock      = System.Windows.Forms.DockStyle.Top;
-            this.pnlBorrowerSearch.Height    = 52;
-            this.pnlBorrowerSearch.Controls.Add(this.lblBorrowerHint);
-            this.pnlBorrowerSearch.Controls.Add(this.btnBorrowerSearch);
-            this.pnlBorrowerSearch.Controls.Add(this.txtBorrowerSearch);
-            this.pnlBorrowerSearch.Controls.Add(this.lblBorrowerSearch);
-
-            this.lblBorrowerSearch.AutoSize  = false;
-            this.lblBorrowerSearch.Text      = "User No / NIC:";
-            this.lblBorrowerSearch.Font      = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblBorrowerSearch.ForeColor = System.Drawing.Color.FromArgb(15, 118, 110);
-            this.lblBorrowerSearch.Location  = new System.Drawing.Point(14, 16);
-            this.lblBorrowerSearch.Size      = new System.Drawing.Size(110, 18);
-
-            this.txtBorrowerSearch.Name        = "txtBorrowerSearch";
-            this.txtBorrowerSearch.Font        = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtBorrowerSearch.Location    = new System.Drawing.Point(130, 12);
-            this.txtBorrowerSearch.Size        = new System.Drawing.Size(350, 26);
-            this.txtBorrowerSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtBorrowerSearch.TabIndex    = 4;
-
-            this.btnBorrowerSearch.Name             = "btnBorrowerSearch";
-            this.btnBorrowerSearch.Text             = " Look Up";
-            this.btnBorrowerSearch.Font             = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnBorrowerSearch.BackColor        = System.Drawing.Color.FromArgb(15, 118, 110);
-            this.btnBorrowerSearch.ForeColor        = System.Drawing.Color.White;
-            this.btnBorrowerSearch.FlatStyle        = System.Windows.Forms.FlatStyle.Flat;
+            // 
+            // pnlBorrowerCard
+            // 
+            this.pnlBorrowerCard.BackColor = System.Drawing.Color.Transparent;
+            this.pnlBorrowerCard.Controls.Add(this.dgvBorrowerLoans);
+            this.pnlBorrowerCard.Controls.Add(this.pnlProfileStats);
+            this.pnlBorrowerCard.Controls.Add(this.btnBorrowerSearch);
+            this.pnlBorrowerCard.Controls.Add(this.pnlBorrowerSearchContainer);
+            this.pnlBorrowerCard.Controls.Add(this.lblBorrowerTitle);
+            this.pnlBorrowerCard.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlBorrowerCard.Location = new System.Drawing.Point(20, 80);
+            this.pnlBorrowerCard.Name = "pnlBorrowerCard";
+            this.pnlBorrowerCard.Padding = new System.Windows.Forms.Padding(20);
+            this.pnlBorrowerCard.Size = new System.Drawing.Size(1060, 700);
+            this.pnlBorrowerCard.TabIndex = 2;
+            this.pnlBorrowerCard.Visible = false;
+            
+            // 
+            // lblBookTitle
+            // 
+            this.lblBookTitle.AutoSize = true;
+            this.lblBookTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBookTitle.Location = new System.Drawing.Point(15, 20);
+            this.lblBookTitle.Name = "lblBookTitle";
+            this.lblBookTitle.Size = new System.Drawing.Size(155, 32);
+            this.lblBookTitle.TabIndex = 0;
+            this.lblBookTitle.Text = "Book Lookup";
+            
+            // 
+            // txtBookSearch
+            // 
+            this.txtBookSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBookSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
+            this.txtBookSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtBookSearch.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtBookSearch.Location = new System.Drawing.Point(20, 12);
+            this.txtBookSearch.Name = "txtBookSearch";
+            this.txtBookSearch.PlaceholderText = "Search by Title or Author";
+            this.txtBookSearch.Size = new System.Drawing.Size(840, 20);
+            this.txtBookSearch.TabIndex = 0;
+            
+            // 
+            // pnlBookSearchContainer
+            // 
+            this.pnlBookSearchContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBookSearchContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
+            this.pnlBookSearchContainer.Controls.Add(this.txtBookSearch);
+            this.pnlBookSearchContainer.Location = new System.Drawing.Point(20, 75);
+            this.pnlBookSearchContainer.Name = "pnlBookSearchContainer";
+            this.pnlBookSearchContainer.Size = new System.Drawing.Size(880, 45);
+            this.pnlBookSearchContainer.TabIndex = 1;
+            this.pnlBookSearchContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.RoundedTextBoxContainer_Paint);
+            
+            // 
+            // btnBookSearch
+            // 
+            this.btnBookSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBookSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(185)))), ((int)(((byte)(129)))));
+            this.btnBookSearch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnBookSearch.FlatAppearance.BorderSize = 0;
+            this.btnBookSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBookSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnBookSearch.ForeColor = System.Drawing.Color.White;
+            this.btnBookSearch.Location = new System.Drawing.Point(920, 75);
+            this.btnBookSearch.Name = "btnBookSearch";
+            this.btnBookSearch.Size = new System.Drawing.Size(120, 45);
+            this.btnBookSearch.TabIndex = 2;
+            this.btnBookSearch.Text = "Look Up";
+            this.btnBookSearch.UseVisualStyleBackColor = false;
+            this.btnBookSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.btnBookSearch.Paint += new System.Windows.Forms.PaintEventHandler(this.RoundedButton_Paint);
+            
+            // 
+            // dgvBookResults
+            // 
+            this.dgvBookResults.AllowUserToAddRows = false;
+            this.dgvBookResults.AllowUserToDeleteRows = false;
+            this.dgvBookResults.AllowUserToResizeRows = false;
+            this.dgvBookResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvBookResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBookResults.BackgroundColor = System.Drawing.Color.White;
+            this.dgvBookResults.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvBookResults.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvBookResults.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgvBookResults.ColumnHeadersHeight = 40;
+            this.dgvBookResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvBookResults.EnableHeadersVisualStyles = false;
+            this.dgvBookResults.Location = new System.Drawing.Point(20, 140);
+            this.dgvBookResults.MultiSelect = false;
+            this.dgvBookResults.Name = "dgvBookResults";
+            this.dgvBookResults.ReadOnly = true;
+            this.dgvBookResults.RowHeadersVisible = false;
+            this.dgvBookResults.RowTemplate.Height = 50;
+            this.dgvBookResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvBookResults.Size = new System.Drawing.Size(1020, 540);
+            this.dgvBookResults.TabIndex = 4;
+            this.dgvBookResults.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvBorrowerLoans_CellPainting);
+            
+            // 
+            // dgvBorrowerLoans
+            // 
+            this.dgvBorrowerLoans.AllowUserToAddRows = false;
+            this.dgvBorrowerLoans.AllowUserToDeleteRows = false;
+            this.dgvBorrowerLoans.AllowUserToResizeRows = false;
+            this.dgvBorrowerLoans.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgvBorrowerLoans.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBorrowerLoans.BackgroundColor = System.Drawing.Color.White;
+            this.dgvBorrowerLoans.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvBorrowerLoans.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvBorrowerLoans.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgvBorrowerLoans.ColumnHeadersHeight = 40;
+            this.dgvBorrowerLoans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvBorrowerLoans.EnableHeadersVisualStyles = false;
+            this.dgvBorrowerLoans.Location = new System.Drawing.Point(20, 300);
+            this.dgvBorrowerLoans.MultiSelect = false;
+            this.dgvBorrowerLoans.Name = "dgvBorrowerLoans";
+            this.dgvBorrowerLoans.ReadOnly = true;
+            this.dgvBorrowerLoans.RowHeadersVisible = false;
+            this.dgvBorrowerLoans.RowTemplate.Height = 50;
+            this.dgvBorrowerLoans.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvBorrowerLoans.Size = new System.Drawing.Size(1020, 380);
+            this.dgvBorrowerLoans.TabIndex = 4;
+            this.dgvBorrowerLoans.Visible = false;
+            this.dgvBorrowerLoans.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvBorrowerLoans_CellPainting);
+            
+            // 
+            // pnlProfileStats
+            // 
+            this.pnlProfileStats.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlProfileStats.Controls.Add(this.lblStatOverdue);
+            this.pnlProfileStats.Controls.Add(this.lblStatActive);
+            this.pnlProfileStats.Controls.Add(this.lblStatTotal);
+            this.pnlProfileStats.Controls.Add(this.lblProfileRegDate);
+            this.pnlProfileStats.Controls.Add(this.lblProfileSex);
+            this.pnlProfileStats.Controls.Add(this.lblProfileAddress);
+            this.pnlProfileStats.Controls.Add(this.lblProfileNid);
+            this.pnlProfileStats.Controls.Add(this.lblProfileUserNo);
+            this.pnlProfileStats.Controls.Add(this.lblProfileName);
+            this.pnlProfileStats.Location = new System.Drawing.Point(20, 140);
+            this.pnlProfileStats.Name = "pnlProfileStats";
+            this.pnlProfileStats.Size = new System.Drawing.Size(1020, 150);
+            this.pnlProfileStats.TabIndex = 3;
+            this.pnlProfileStats.Visible = false;
+            
+            // 
+            // lblStatOverdue
+            // 
+            this.lblStatOverdue.AutoSize = true;
+            this.lblStatOverdue.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblStatOverdue.Location = new System.Drawing.Point(280, 120);
+            this.lblStatOverdue.Name = "lblStatOverdue";
+            this.lblStatOverdue.Size = new System.Drawing.Size(84, 19);
+            this.lblStatOverdue.TabIndex = 8;
+            this.lblStatOverdue.Text = "Overdue";
+            
+            // 
+            // lblStatActive
+            // 
+            this.lblStatActive.AutoSize = true;
+            this.lblStatActive.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblStatActive.Location = new System.Drawing.Point(140, 120);
+            this.lblStatActive.Name = "lblStatActive";
+            this.lblStatActive.Size = new System.Drawing.Size(46, 19);
+            this.lblStatActive.TabIndex = 7;
+            this.lblStatActive.Text = "Active";
+            
+            // 
+            // lblStatTotal
+            // 
+            this.lblStatTotal.AutoSize = true;
+            this.lblStatTotal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblStatTotal.Location = new System.Drawing.Point(5, 120);
+            this.lblStatTotal.Name = "lblStatTotal";
+            this.lblStatTotal.Size = new System.Drawing.Size(38, 19);
+            this.lblStatTotal.TabIndex = 6;
+            this.lblStatTotal.Text = "Total";
+            
+            // 
+            // lblProfileRegDate
+            // 
+            this.lblProfileRegDate.AutoSize = true;
+            this.lblProfileRegDate.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileRegDate.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileRegDate.Location = new System.Drawing.Point(280, 85);
+            this.lblProfileRegDate.Name = "lblProfileRegDate";
+            this.lblProfileRegDate.Size = new System.Drawing.Size(73, 17);
+            this.lblProfileRegDate.TabIndex = 5;
+            this.lblProfileRegDate.Text = "Registered:";
+            
+            // 
+            // lblProfileSex
+            // 
+            this.lblProfileSex.AutoSize = true;
+            this.lblProfileSex.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileSex.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileSex.Location = new System.Drawing.Point(5, 85);
+            this.lblProfileSex.Name = "lblProfileSex";
+            this.lblProfileSex.Size = new System.Drawing.Size(31, 17);
+            this.lblProfileSex.TabIndex = 4;
+            this.lblProfileSex.Text = "Sex:";
+            
+            // 
+            // lblProfileAddress
+            // 
+            this.lblProfileAddress.AutoSize = true;
+            this.lblProfileAddress.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileAddress.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileAddress.Location = new System.Drawing.Point(5, 60);
+            this.lblProfileAddress.Name = "lblProfileAddress";
+            this.lblProfileAddress.Size = new System.Drawing.Size(59, 17);
+            this.lblProfileAddress.TabIndex = 3;
+            this.lblProfileAddress.Text = "Address:";
+            
+            // 
+            // lblProfileNid
+            // 
+            this.lblProfileNid.AutoSize = true;
+            this.lblProfileNid.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileNid.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileNid.Location = new System.Drawing.Point(280, 35);
+            this.lblProfileNid.Name = "lblProfileNid";
+            this.lblProfileNid.Size = new System.Drawing.Size(78, 17);
+            this.lblProfileNid.TabIndex = 2;
+            this.lblProfileNid.Text = "National ID:";
+            
+            // 
+            // lblProfileUserNo
+            // 
+            this.lblProfileUserNo.AutoSize = true;
+            this.lblProfileUserNo.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileUserNo.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileUserNo.Location = new System.Drawing.Point(5, 35);
+            this.lblProfileUserNo.Name = "lblProfileUserNo";
+            this.lblProfileUserNo.Size = new System.Drawing.Size(56, 17);
+            this.lblProfileUserNo.TabIndex = 1;
+            this.lblProfileUserNo.Text = "User No:";
+            
+            // 
+            // lblProfileName
+            // 
+            this.lblProfileName.AutoSize = true;
+            this.lblProfileName.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(41)))), ((int)(((byte)(59)))));
+            this.lblProfileName.Location = new System.Drawing.Point(0, 0);
+            this.lblProfileName.Name = "lblProfileName";
+            this.lblProfileName.Size = new System.Drawing.Size(182, 30);
+            this.lblProfileName.TabIndex = 0;
+            this.lblProfileName.Text = "Borrower Name";
+            
+            // 
+            // btnBorrowerSearch
+            // 
+            this.btnBorrowerSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBorrowerSearch.BackColor = System.Drawing.Color.FromArgb(16, 185, 129);
+            this.btnBorrowerSearch.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnBorrowerSearch.FlatAppearance.BorderSize = 0;
-            this.btnBorrowerSearch.Location         = new System.Drawing.Point(490, 11);
-            this.btnBorrowerSearch.Size             = new System.Drawing.Size(110, 28);
-            this.btnBorrowerSearch.Cursor           = System.Windows.Forms.Cursors.Hand;
-            this.btnBorrowerSearch.TabIndex         = 5;
-            this.btnBorrowerSearch.Click           += new System.EventHandler(this.btnBorrowerSearch_Click);
-
-            this.lblBorrowerHint.AutoSize  = false;
-            this.lblBorrowerHint.Text      = "e.g. 1001  or  200156789V";
-            this.lblBorrowerHint.Font      = new System.Drawing.Font("Segoe UI", 7.5F, System.Drawing.FontStyle.Italic);
-            this.lblBorrowerHint.ForeColor = System.Drawing.Color.FromArgb(100, 116, 139);
-            this.lblBorrowerHint.Location  = new System.Drawing.Point(612, 18);
-            this.lblBorrowerHint.Size      = new System.Drawing.Size(250, 16);
-
-            // ── Profile card ─────────────────────────────────────────────
-            this.pnlProfile.BackColor   = System.Drawing.Color.White;
-            this.pnlProfile.Dock        = System.Windows.Forms.DockStyle.Top;
-            this.pnlProfile.Height      = 90;
-            this.pnlProfile.Visible     = false;
-            this.pnlProfile.Padding     = new System.Windows.Forms.Padding(12, 6, 12, 6);
-            this.pnlProfile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-
-            // Left column — name + NIC + address
-            this.lblProfileName.Text      = "";
-            this.lblProfileName.Font      = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
-            this.lblProfileName.ForeColor = System.Drawing.Color.FromArgb(30, 41, 59);
-            this.lblProfileName.Location  = new System.Drawing.Point(14, 8);
-            this.lblProfileName.Size      = new System.Drawing.Size(380, 22);
-            this.lblProfileName.AutoSize  = false;
-
-            this.lblProfileUserNo.Text      = "";
-            this.lblProfileUserNo.Font      = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblProfileUserNo.ForeColor = System.Drawing.Color.FromArgb(55, 65, 81);
-            this.lblProfileUserNo.Location  = new System.Drawing.Point(14, 32);
-            this.lblProfileUserNo.Size      = new System.Drawing.Size(380, 17);
-            this.lblProfileUserNo.AutoSize  = false;
-
-            this.lblProfileNid.Text      = "";
-            this.lblProfileNid.Font      = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblProfileNid.ForeColor = System.Drawing.Color.FromArgb(55, 65, 81);
-            this.lblProfileNid.Location  = new System.Drawing.Point(14, 50);
-            this.lblProfileNid.Size      = new System.Drawing.Size(380, 17);
-            this.lblProfileNid.AutoSize  = false;
-
-            this.lblProfileAddress.Text      = "";
-            this.lblProfileAddress.Font      = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblProfileAddress.ForeColor = System.Drawing.Color.FromArgb(55, 65, 81);
-            this.lblProfileAddress.Location  = new System.Drawing.Point(14, 68);
-            this.lblProfileAddress.Size      = new System.Drawing.Size(380, 17);
-            this.lblProfileAddress.AutoSize  = false;
-
-            // Right column — sex + reg date
-            this.lblProfileSex.Text      = "";
-            this.lblProfileSex.Font      = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblProfileSex.ForeColor = System.Drawing.Color.FromArgb(55, 65, 81);
-            this.lblProfileSex.Location  = new System.Drawing.Point(420, 32);
-            this.lblProfileSex.Size      = new System.Drawing.Size(300, 17);
-            this.lblProfileSex.AutoSize  = false;
-
-            this.lblProfileRegDate.Text      = "";
-            this.lblProfileRegDate.Font      = new System.Drawing.Font("Segoe UI", 9F);
-            this.lblProfileRegDate.ForeColor = System.Drawing.Color.FromArgb(55, 65, 81);
-            this.lblProfileRegDate.Location  = new System.Drawing.Point(420, 50);
-            this.lblProfileRegDate.Size      = new System.Drawing.Size(300, 17);
-            this.lblProfileRegDate.AutoSize  = false;
-
-            // Stats row
-            this.pnlStats.BackColor = System.Drawing.Color.FromArgb(240, 253, 250);
-            this.pnlStats.Location  = new System.Drawing.Point(420, 8);
-            this.pnlStats.Size      = new System.Drawing.Size(500, 22);
-            this.pnlStats.Controls.Add(this.lblStatTotal);
-            this.pnlStats.Controls.Add(this.lblStatActive);
-            this.pnlStats.Controls.Add(this.lblStatOverdue);
-
-            this.lblStatTotal.Text      = "";
-            this.lblStatTotal.Font      = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this.lblStatTotal.ForeColor = System.Drawing.Color.FromArgb(55, 65, 81);
-            this.lblStatTotal.Location  = new System.Drawing.Point(0, 3);
-            this.lblStatTotal.Size      = new System.Drawing.Size(120, 16);
-            this.lblStatTotal.AutoSize  = false;
-
-            this.lblStatActive.Text      = "";
-            this.lblStatActive.Font      = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this.lblStatActive.ForeColor = System.Drawing.Color.FromArgb(22, 163, 74);
-            this.lblStatActive.Location  = new System.Drawing.Point(130, 3);
-            this.lblStatActive.Size      = new System.Drawing.Size(140, 16);
-            this.lblStatActive.AutoSize  = false;
-
-            this.lblStatOverdue.Text      = "";
-            this.lblStatOverdue.Font      = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Bold);
-            this.lblStatOverdue.ForeColor = System.Drawing.Color.FromArgb(185, 28, 28);
-            this.lblStatOverdue.Location  = new System.Drawing.Point(280, 3);
-            this.lblStatOverdue.Size      = new System.Drawing.Size(180, 16);
-            this.lblStatOverdue.AutoSize  = false;
-
-            this.pnlProfile.Controls.Add(this.lblProfileName);
-            this.pnlProfile.Controls.Add(this.lblProfileUserNo);
-            this.pnlProfile.Controls.Add(this.lblProfileNid);
-            this.pnlProfile.Controls.Add(this.lblProfileAddress);
-            this.pnlProfile.Controls.Add(this.lblProfileSex);
-            this.pnlProfile.Controls.Add(this.lblProfileRegDate);
-            this.pnlProfile.Controls.Add(this.pnlStats);
-
-            // ── Loans grid ───────────────────────────────────────────────
-            this.dgvLoans.Name                  = "dgvLoans";
-            this.dgvLoans.Dock                  = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLoans.ReadOnly              = true;
-            this.dgvLoans.AllowUserToAddRows    = false;
-            this.dgvLoans.AllowUserToDeleteRows = false;
-            this.dgvLoans.SelectionMode         = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLoans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLoans.AutoSizeColumnsMode   = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvLoans.RowHeadersVisible     = false;
-            this.dgvLoans.Font                  = new System.Drawing.Font("Segoe UI", 9F);
-            this.dgvLoans.BackgroundColor       = System.Drawing.Color.White;
-            this.dgvLoans.BorderStyle           = System.Windows.Forms.BorderStyle.None;
-            this.dgvLoans.GridColor             = System.Drawing.Color.FromArgb(220, 225, 235);
-            this.dgvLoans.ColumnHeadersDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(15, 118, 110);
-            this.dgvLoans.ColumnHeadersDefaultCellStyle.ForeColor = System.Drawing.Color.White;
-            this.dgvLoans.ColumnHeadersDefaultCellStyle.Font      = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.dgvLoans.EnableHeadersVisualStyles = false;
-            this.dgvLoans.AlternatingRowsDefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(240, 253, 250);
-            this.dgvLoans.Visible   = false;
-            this.dgvLoans.TabIndex  = 6;
-
-            // ── Borrower section container ────────────────────────────────
-            this.pnlBorrowerSection.Dock      = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBorrowerSection.BackColor = System.Drawing.Color.White;
-            this.pnlBorrowerSection.Controls.Add(this.dgvLoans);
-            this.pnlBorrowerSection.Controls.Add(this.pnlProfile);
-            this.pnlBorrowerSection.Controls.Add(this.pnlBorrowerSearch);
-            this.pnlBorrowerSection.Controls.Add(this.pnlBorrowerHeader);
-
-            // ── Body (outer container) ────────────────────────────────────
-            this.pnlBody.BackColor = System.Drawing.Color.White;
-            this.pnlBody.Dock      = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBody.Controls.Add(this.pnlBorrowerSection);
-            this.pnlBody.Controls.Add(this.dgvResults);
-            this.pnlBody.Controls.Add(this.pnlSearch);
-
-            // ── Form ─────────────────────────────────────────────────────
+            this.btnBorrowerSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnBorrowerSearch.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnBorrowerSearch.ForeColor = System.Drawing.Color.White;
+            this.btnBorrowerSearch.Location = new System.Drawing.Point(920, 75);
+            this.btnBorrowerSearch.Name = "btnBorrowerSearch";
+            this.btnBorrowerSearch.Size = new System.Drawing.Size(120, 45);
+            this.btnBorrowerSearch.TabIndex = 2;
+            this.btnBorrowerSearch.Text = "Look Up";
+            this.btnBorrowerSearch.UseVisualStyleBackColor = false;
+            this.btnBorrowerSearch.Click += new System.EventHandler(this.btnBorrowerSearch_Click);
+            this.btnBorrowerSearch.Paint += new System.Windows.Forms.PaintEventHandler(this.RoundedButton_Paint);
+            
+            // 
+            // pnlBorrowerSearchContainer
+            // 
+            this.pnlBorrowerSearchContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlBorrowerSearchContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
+            this.pnlBorrowerSearchContainer.Controls.Add(this.txtBorrowerSearch);
+            this.pnlBorrowerSearchContainer.Location = new System.Drawing.Point(20, 75);
+            this.pnlBorrowerSearchContainer.Name = "pnlBorrowerSearchContainer";
+            this.pnlBorrowerSearchContainer.Size = new System.Drawing.Size(880, 45);
+            this.pnlBorrowerSearchContainer.TabIndex = 1;
+            this.pnlBorrowerSearchContainer.Paint += new System.Windows.Forms.PaintEventHandler(this.RoundedTextBoxContainer_Paint);
+            
+            // 
+            // txtBorrowerSearch
+            // 
+            this.txtBorrowerSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBorrowerSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(244)))), ((int)(((byte)(248)))));
+            this.txtBorrowerSearch.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtBorrowerSearch.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.txtBorrowerSearch.Location = new System.Drawing.Point(20, 12);
+            this.txtBorrowerSearch.Name = "txtBorrowerSearch";
+            this.txtBorrowerSearch.PlaceholderText = "Search by User No or NIC";
+            this.txtBorrowerSearch.Size = new System.Drawing.Size(840, 20);
+            this.txtBorrowerSearch.TabIndex = 0;
+            
+            // 
+            // lblBorrowerTitle
+            // 
+            this.lblBorrowerTitle.AutoSize = true;
+            this.lblBorrowerTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblBorrowerTitle.Location = new System.Drawing.Point(15, 20);
+            this.lblBorrowerTitle.Name = "lblBorrowerTitle";
+            this.lblBorrowerTitle.Size = new System.Drawing.Size(213, 32);
+            this.lblBorrowerTitle.TabIndex = 0;
+            this.lblBorrowerTitle.Text = "Borrower Lookup";
+            
+            // 
+            // InquiryForm
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode       = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize          = new System.Drawing.Size(980, 660);
-            this.StartPosition       = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text                = "Book & Borrower Inquiry";
-            this.Controls.Add(this.pnlBody);
-            this.Controls.Add(this.pnlHeader);
-
-            ((System.ComponentModel.ISupportInitialize)(this.dgvResults)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLoans)).EndInit();
-            this.pnlHeader.ResumeLayout(false);
-            this.pnlSearch.ResumeLayout(false);
-            this.pnlBorrowerHeader.ResumeLayout(false);
-            this.pnlBorrowerSearch.ResumeLayout(false);
-            this.pnlProfile.ResumeLayout(false);
-            this.pnlStats.ResumeLayout(false);
-            this.pnlBorrowerSection.ResumeLayout(false);
-            this.pnlBody.ResumeLayout(false);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1100, 800);
+            this.Controls.Add(this.pnlContent);
+            this.Name = "InquiryForm";
+            this.Text = "Inquiry Dashboard";
+            
+            this.pnlContent.ResumeLayout(false);
+            this.pnlToggle.ResumeLayout(false);
+            this.pnlBookCard.ResumeLayout(false);
+            this.pnlBookCard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBookResults)).EndInit();
+            this.pnlBookSearchContainer.ResumeLayout(false);
+            this.pnlBookSearchContainer.PerformLayout();
+            this.pnlBorrowerCard.ResumeLayout(false);
+            this.pnlBorrowerCard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowerLoans)).EndInit();
+            this.pnlProfileStats.ResumeLayout(false);
+            this.pnlProfileStats.PerformLayout();
+            this.pnlBorrowerSearchContainer.ResumeLayout(false);
+            this.pnlBorrowerSearchContainer.PerformLayout();
             this.ResumeLayout(false);
         }
 
-        // Field declarations
-        private System.Windows.Forms.Panel          pnlHeader;
-        private System.Windows.Forms.Label          lblTitle;
-        private System.Windows.Forms.Label          lblSubtitle;
-        private System.Windows.Forms.Panel          pnlBody;
-
-        // Book search
-        private System.Windows.Forms.Panel          pnlSearch;
-        private System.Windows.Forms.Label          lblSearch;
-        private System.Windows.Forms.TextBox        txtSearch;
-        private System.Windows.Forms.Button         btnSearch;
-        private System.Windows.Forms.Label          lblHint;
-        private System.Windows.Forms.DataGridView   dgvResults;
-
-        // Borrower search
-        private System.Windows.Forms.Panel          pnlBorrowerSection;
-        private System.Windows.Forms.Panel          pnlBorrowerHeader;
-        private System.Windows.Forms.Label          lblBorrowerSectionTitle;
-        private System.Windows.Forms.Panel          pnlBorrowerSearch;
-        private System.Windows.Forms.Label          lblBorrowerSearch;
-        private System.Windows.Forms.TextBox        txtBorrowerSearch;
-        private System.Windows.Forms.Button         btnBorrowerSearch;
-        private System.Windows.Forms.Label          lblBorrowerHint;
-
-        // Profile card
-        private System.Windows.Forms.Panel          pnlProfile;
-        private System.Windows.Forms.Label          lblProfileName;
-        private System.Windows.Forms.Label          lblProfileUserNo;
-        private System.Windows.Forms.Label          lblProfileNid;
-        private System.Windows.Forms.Label          lblProfileAddress;
-        private System.Windows.Forms.Label          lblProfileSex;
-        private System.Windows.Forms.Label          lblProfileRegDate;
-        private System.Windows.Forms.Panel          pnlStats;
-        private System.Windows.Forms.Label          lblStatTotal;
-        private System.Windows.Forms.Label          lblStatActive;
-        private System.Windows.Forms.Label          lblStatOverdue;
-
-        // Loans grid
-        private System.Windows.Forms.DataGridView   dgvLoans;
+        private System.Windows.Forms.Panel pnlContent;
+        private System.Windows.Forms.Panel pnlToggle;
+        private System.Windows.Forms.Button btnToggleBook;
+        private System.Windows.Forms.Button btnToggleBorrower;
+        private System.Windows.Forms.Panel pnlBookCard;
+        private System.Windows.Forms.Label lblBookTitle;
+        private System.Windows.Forms.Panel pnlBookSearchContainer;
+        private System.Windows.Forms.TextBox txtBookSearch;
+        private System.Windows.Forms.Button btnBookSearch;
+        private System.Windows.Forms.DataGridView dgvBookResults;
+        private System.Windows.Forms.Panel pnlBorrowerCard;
+        private System.Windows.Forms.Label lblBorrowerTitle;
+        private System.Windows.Forms.Panel pnlBorrowerSearchContainer;
+        private System.Windows.Forms.TextBox txtBorrowerSearch;
+        private System.Windows.Forms.Button btnBorrowerSearch;
+        private System.Windows.Forms.Panel pnlProfileStats;
+        private System.Windows.Forms.Label lblProfileName;
+        private System.Windows.Forms.Label lblProfileUserNo;
+        private System.Windows.Forms.Label lblProfileNid;
+        private System.Windows.Forms.Label lblProfileAddress;
+        private System.Windows.Forms.Label lblProfileSex;
+        private System.Windows.Forms.Label lblProfileRegDate;
+        private System.Windows.Forms.Label lblStatTotal;
+        private System.Windows.Forms.Label lblStatActive;
+        private System.Windows.Forms.Label lblStatOverdue;
+        private System.Windows.Forms.DataGridView dgvBorrowerLoans;
     }
 }
-

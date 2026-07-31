@@ -13,6 +13,7 @@ namespace SarasaviLibrary.UI.Forms
         {
             InitializeComponent();
             _bookService = new BookService();
+            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
@@ -42,8 +43,8 @@ namespace SarasaviLibrary.UI.Forms
                     _bookService.AddCopies(title.TitleId, copies, bookType);
                 }
 
-                MessageBox.Show($"Title Registered Successfully!\nPrefix: {title.BookNumberPrefix}\nCopies Added: {copies}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ClearForm();
+                CustomMessageBox.Show($"Title Registered Successfully!\n\nPrefix: {title.BookNumberPrefix}\nCopies Added: {copies}", "Registration Complete");
+                this.Close();
             }
             catch (Exception ex)
             {

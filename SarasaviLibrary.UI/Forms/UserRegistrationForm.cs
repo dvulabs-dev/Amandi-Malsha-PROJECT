@@ -14,6 +14,7 @@ namespace SarasaviLibrary.UI.Forms
             InitializeComponent();
             _userService = new UserService();
             cmbSex.DataSource = Enum.GetValues(typeof(Sex));
+            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
         }
 
         private void btnRegister_Click(object sender, EventArgs e)
@@ -33,8 +34,8 @@ namespace SarasaviLibrary.UI.Forms
                     txtNIC.Text
                 );
 
-                MessageBox.Show($"Borrower Registered Successfully!\nUser Number: {borrower.UserNumber}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                ClearForm();
+                CustomMessageBox.Show($"Borrower Registered Successfully!\n\nUser Number: {borrower.UserNumber}", "Registration Complete");
+                this.Close();
             }
             catch (Exception ex)
             {

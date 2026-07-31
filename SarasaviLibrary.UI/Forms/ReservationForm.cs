@@ -19,6 +19,7 @@ namespace SarasaviLibrary.UI.Forms
             InitializeComponent();
             _reservationService = new ReservationService();
             _inquiryService = new InquiryService();
+            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
         }
 
         private void btnSearch_Click(object sender, EventArgs e)
@@ -69,14 +70,11 @@ namespace SarasaviLibrary.UI.Forms
                 var selectedTitle = _searchResults[cmbTitles.SelectedIndex];
                 var reservation = _reservationService.ReserveTitle(userNumber, selectedTitle.TitleId);
 
-                MessageBox.Show(
-                    $"Reservation queued successfully!\nReservation ID: {reservation.ReservationId}\nTitle: {selectedTitle.Name}",
-                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                CustomMessageBox.Show(
+                    $"Reservation queued successfully!\n\nReservation ID: {reservation.ReservationId}\nTitle: {selectedTitle.Name}",
+                    "Reservation Complete");
 
-                txtUserNumber.Clear();
-                txtTitleSearch.Clear();
-                cmbTitles.Items.Clear();
-                _searchResults.Clear();
+                this.Close();
             }
             catch (Exception ex)
             {

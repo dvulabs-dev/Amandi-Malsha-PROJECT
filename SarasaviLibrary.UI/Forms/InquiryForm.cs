@@ -14,6 +14,7 @@ namespace SarasaviLibrary.UI.Forms
         {
             InitializeComponent();
             _inquiryService = new InquiryService();
+            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
         }
 
         // ── Book Search ──────────────────────────────────────────────────

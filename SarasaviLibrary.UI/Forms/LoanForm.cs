@@ -117,17 +117,15 @@ namespace SarasaviLibrary.UI.Forms
             {
                 var loan = _loanService.PlaceLoan(_checkedUserNumber, _checkedAccessionNumber);
 
-                MessageBox.Show(
-                    $"✅  Loan confirmed!\n\n" +
+                CustomMessageBox.Show(
+                    $"Loan confirmed!\n\n" +
                     $"Borrower : {lblBorrowerName.Text}\n" +
                     $"Book     : {lblBookTitle.Text}\n" +
                     $"Loan Date: {loan.LoanDate.ToShortDateString()}\n" +
                     $"Due Date : {loan.DueDate.ToShortDateString()}",
-                    "Loan Accepted",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                    "Loan Processed Successfully");
 
-                ResetForm();
+                this.Close();
             }
             catch (Exception ex)
             {

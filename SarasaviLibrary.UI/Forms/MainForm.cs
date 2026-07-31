@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -11,13 +11,13 @@ namespace SarasaviLibrary.UI.Forms
 {
     public partial class MainForm : Form
     {
-        private Label _lblStatTitles;
-        private Label _lblStatCopies;
-        private Label _lblStatBorrowers;
-        private Label _lblStatLoans;
-        private Label _lblStatOverdue;
-        private Label _lblStatReserved;
-        private Button _activeNavButton;
+        private Label _lblStatTitles = null!;
+        private Label _lblStatCopies = null!;
+        private Label _lblStatBorrowers = null!;
+        private Label _lblStatLoans = null!;
+        private Label _lblStatOverdue = null!;
+        private Label _lblStatReserved = null!;
+        private Button _activeNavButton = null!;
 
         public MainForm()
         {
@@ -41,14 +41,18 @@ namespace SarasaviLibrary.UI.Forms
             pnlSidebar.Width = 300; // Increased width for better proportions
 
             Color darkBlue = Color.FromArgb(30, 58, 138); // Deep premium blue
-            pnlSidebar.BackColor = darkBlue;
-            pnlLogo.BackColor = darkBlue;
-            pnlNavContainer.BackColor = darkBlue;
-            pnlNavBottom.BackColor = darkBlue;
-            btnNavExit.BackColor = darkBlue;
+            btnNavExit.BackColor = Color.Transparent;
 
-            // Smooth rounded corners for the sidebar
-            pnlSidebar.Resize += (s, e) => {
+            // Smooth rounded corners for the sidebar via Paint (anti-aliased)
+            pnlSidebar.BackColor = Color.Transparent;
+            pnlLogo.BackColor = Color.Transparent;
+            pnlNavContainer.BackColor = Color.Transparent;
+            pnlNavBottom.BackColor = Color.Transparent;
+            
+            pnlSidebar.Paint += (s, e) => {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                e.Graphics.Clear(Color.FromArgb(245, 247, 250)); // Form Background
+                
                 var path = new GraphicsPath();
                 int r = 30; // Radius for top and bottom right corners
                 path.AddLine(0, 0, pnlSidebar.Width - r, 0);
@@ -57,7 +61,11 @@ namespace SarasaviLibrary.UI.Forms
                 path.AddArc(pnlSidebar.Width - r, pnlSidebar.Height - r, r, r, 0, 90);
                 path.AddLine(pnlSidebar.Width - r, pnlSidebar.Height, 0, pnlSidebar.Height);
                 path.CloseFigure();
-                pnlSidebar.Region = new Region(path);
+                
+                using (var brush = new SolidBrush(darkBlue))
+                {
+                    e.Graphics.FillPath(brush, path);
+                }
             };
 
             var navButtons = new[] { btnNavDashboard, btnNavRegisterUser, btnNavRegisterBook,
@@ -70,8 +78,10 @@ namespace SarasaviLibrary.UI.Forms
             {
                 btn.Size = new Size(pnlSidebar.Width, 60);
                 btn.Location = new Point(0, y);
-                btn.BackColor = darkBlue;
-                btn.ForeColor = Color.Transparent; // Hide default text
+                btn.BackColor = Color.Transparent;
+                btn.ForeColor = Color.Transparent; 
+                btn.Tag = btn.Text;
+                btn.Text = string.Empty; // Hide native text perfectly
                 btn.FlatStyle = FlatStyle.Flat;
                 btn.FlatAppearance.BorderSize = 0;
                 btn.FlatAppearance.MouseOverBackColor = darkBlue;
@@ -240,7 +250,8 @@ namespace SarasaviLibrary.UI.Forms
             tlp.Controls.Add(pnlPieChart, 1, 0);
 
             PaintEventHandler drawCard = (s, e) => {
-                var p = (Panel)s;
+                var p = s as Panel;
+                if (p == null) return;
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 var rect = new Rectangle(0, 0, p.Width - 1, p.Height - 1);
                 var path = new GraphicsPath();
@@ -329,63 +340,48 @@ namespace SarasaviLibrary.UI.Forms
             };
         }
 
-        private void NavButton_Paint(object sender, PaintEventArgs e)
+        private void NavButton_Paint(object? sender, PaintEventArgs e)
         {
-            Button btn = sender as Button;
+            Button? btn = sender as Button;
+            if (btn == null) return;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.Clear(pnlSidebar.BackColor);
+            // Background is drawn by sidebar Paint, we just need to avoid clearing with a solid color.
+            // If active, it draws the pill. If not, just text.
 
             int margin = 20;
+            int rightMargin = 20;
 
             if (btn == _activeNavButton)
             {
                 int r = 16;
-                
-                var path = new GraphicsPath();
-                path.AddArc(margin, 10, r * 2, r * 2, 180, 90);
-                path.AddLine(margin + r, 10, btn.Width, 10);
-                path.AddLine(btn.Width, 10, btn.Width, btn.Height - 10);
-                path.AddLine(btn.Width, btn.Height - 10, margin + r, btn.Height - 10);
-                path.AddArc(margin, btn.Height - 10 - r * 2, r * 2, r * 2, 90, 90);
-                path.CloseFigure();
+                var rect = new Rectangle(margin, 10, btn.Width - margin - rightMargin, btn.Height - 20);
+                var path = GetRoundedRect(rect, r);
                 
                 using (var brush = new SolidBrush(Color.FromArgb(241, 245, 249)))
                 {
                     e.Graphics.FillPath(brush, path);
                 }
 
-                var topFillet = new GraphicsPath();
-                topFillet.AddLine(btn.Width, 10, btn.Width - r, 10);
-                topFillet.AddArc(btn.Width - r * 2, 10 - r * 2, r * 2, r * 2, 90, -90);
-                topFillet.AddLine(btn.Width, 10 - r, btn.Width, 10);
-                topFillet.CloseFigure();
-                using (var brush = new SolidBrush(Color.FromArgb(241, 245, 249))) { e.Graphics.FillPath(brush, topFillet); }
-
-                var botFillet = new GraphicsPath();
-                botFillet.AddLine(btn.Width, btn.Height - 10, btn.Width - r, btn.Height - 10);
-                botFillet.AddArc(btn.Width - r * 2, btn.Height - 10, r * 2, r * 2, 270, 90);
-                botFillet.AddLine(btn.Width, btn.Height - 10 + r, btn.Width, btn.Height - 10);
-                botFillet.CloseFigure();
-                using (var brush = new SolidBrush(Color.FromArgb(241, 245, 249))) { e.Graphics.FillPath(brush, botFillet); }
-
                 int pillHeight = 22;
                 int pillY = (btn.Height - pillHeight) / 2;
                 var pillPath = new GraphicsPath();
-                pillPath.AddArc(margin + 6, pillY, 6, 6, 180, 180);
-                pillPath.AddArc(margin + 6, pillY + pillHeight - 6, 6, 6, 0, 180);
+                pillPath.AddArc(margin + 10, pillY, 6, 6, 180, 180);
+                pillPath.AddArc(margin + 10, pillY + pillHeight - 6, 6, 6, 0, 180);
                 pillPath.CloseFigure();
                 using (var brush = new SolidBrush(Color.FromArgb(250, 204, 21))) { e.Graphics.FillPath(brush, pillPath); }
 
+                string text = btn.Tag?.ToString() ?? "";
                 using (var font = new Font("Segoe UI", 10.5F, FontStyle.Bold))
                 {
-                    TextRenderer.DrawText(e.Graphics, btn.Text, font, new Point(margin + 35, (btn.Height - font.Height) / 2), Color.FromArgb(30, 41, 59));
+                    TextRenderer.DrawText(e.Graphics, text, font, new Point(margin + 40, (btn.Height - font.Height) / 2), Color.FromArgb(30, 41, 59));
                 }
             }
             else
             {
+                string text = btn.Tag?.ToString() ?? "";
                 using (var font = new Font("Segoe UI", 10.5F, FontStyle.Regular))
                 {
-                    TextRenderer.DrawText(e.Graphics, btn.Text, font, new Point(margin + 35, (btn.Height - font.Height) / 2), Color.FromArgb(191, 219, 254));
+                    TextRenderer.DrawText(e.Graphics, text, font, new Point(margin + 40, (btn.Height - font.Height) / 2), Color.FromArgb(191, 219, 254));
                 }
             }
         }
@@ -394,7 +390,7 @@ namespace SarasaviLibrary.UI.Forms
         {
             lblDateTime.Text = "📅  " + DateTime.Now.ToString("ddd, dd MMM yyyy") +
                                "     🕐  " + DateTime.Now.ToString("HH:mm:ss") +
-                               "     👤  admin";
+                               "     admin";
         }
 
         // ─────────────────────────────────────────────────────────────────
@@ -405,8 +401,8 @@ namespace SarasaviLibrary.UI.Forms
             flpStats.Controls.Clear();
             var cardDefs = new[]
             {
-                new { Icon = "📚", Title = "Total Book Titles",      Accent = Color.FromArgb(37,  99, 235) },
-                new { Icon = "👤", Title = "Registered Borrowers",   Accent = Color.FromArgb(16,  185, 129) },
+                new { Icon = "", Title = "Total Book Titles",      Accent = Color.FromArgb(37,  99, 235) },
+                new { Icon = "", Title = "Registered Borrowers",   Accent = Color.FromArgb(16,  185, 129) },
                 new { Icon = "📖", Title = "Active Loans",           Accent = Color.FromArgb(245, 158,  11) },
                 new { Icon = "⏰", Title = "Overdue Loans",          Accent = Color.FromArgb(239,  68,  68) }
             };
@@ -490,7 +486,7 @@ namespace SarasaviLibrary.UI.Forms
                     // Avatars
                     int avatarY = drop + 42;
                     int avatarSize = 40;
-                    string[] emojis = { "👤", "📚", "🏫" };
+                    string[] emojis = { "", "", "🏫" };
                     Color[] avatarColors = { Color.FromArgb(254, 226, 226), Color.FromArgb(219, 234, 254), Color.FromArgb(220, 252, 231) };
                     for (int j = 2; j >= 0; j--) { 
                         int ax = 24 + (j * 24);
@@ -600,16 +596,39 @@ namespace SarasaviLibrary.UI.Forms
             return path;
         }
 
-        /// <summary>Opens a module as a dialog, then refreshes stats when it closes.</summary>
         private void OpenModule(Button navBtn, string pageTitle, Form form)
         {
             SetActiveNav(navBtn);
             lblPageTitle.Text = "  " + pageTitle;
             form.ShowDialog(this);
             // Return to dashboard after dialog closes
-            lblPageTitle.Text = "  📊   Dashboard";
-            SetActiveNav(btnNavDashboard);
-            LoadDashboardStats();
+            btnNavDashboard_Click(btnNavDashboard, EventArgs.Empty);
+        }
+
+        private void OpenModuleInline(Button navBtn, string pageTitle, Form form)
+        {
+            SetActiveNav(navBtn);
+            lblPageTitle.Text = "  " + pageTitle;
+
+            // Hide dashboard controls in pnlContent
+            foreach (Control c in pnlContent.Controls)
+            {
+                c.Visible = false;
+            }
+
+            // Remove any previously hosted forms
+            var existingForms = pnlContent.Controls.OfType<Form>().ToList();
+            foreach (var f in existingForms)
+            {
+                pnlContent.Controls.Remove(f);
+                f.Dispose();
+            }
+
+            form.TopLevel = false;
+            form.FormBorderStyle = FormBorderStyle.None;
+            form.Dock = DockStyle.Fill;
+            pnlContent.Controls.Add(form);
+            form.Show();
         }
 
         // ─────────────────────────────────────────────────────────────────
@@ -619,27 +638,44 @@ namespace SarasaviLibrary.UI.Forms
         {
             SetActiveNav(btnNavDashboard);
             lblPageTitle.Text = "  📊   Dashboard";
+
+            // Remove any hosted forms
+            var existingForms = pnlContent.Controls.OfType<Form>().ToList();
+            foreach (var f in existingForms)
+            {
+                pnlContent.Controls.Remove(f);
+                f.Dispose();
+            }
+
+            // Show dashboard controls
+            foreach (Control c in pnlContent.Controls)
+            {
+                c.Visible = true;
+            }
+            pnlWelcomeBanner.Visible = false; // Keep welcome banner hidden
+
             LoadDashboardStats();
         }
 
         private void btnNavRegisterUser_Click(object sender, EventArgs e) =>
-            OpenModule(btnNavRegisterUser, "👤   Register Borrower", new UserRegistrationForm());
+            OpenModuleInline(btnNavRegisterUser, "👥   Borrowers List", new BorrowerListForm());
 
         private void btnNavRegisterBook_Click(object sender, EventArgs e) =>
-            OpenModule(btnNavRegisterBook, "📗   Register Book", new BookRegistrationForm());
+            OpenModuleInline(btnNavRegisterBook, " Registered Books", new BookListForm());
 
         private void btnNavLoan_Click(object sender, EventArgs e) =>
-            OpenModule(btnNavLoan, "📖   Book Loan", new LoanForm());
+            OpenModuleInline(btnNavLoan, "📖   Active Loans", new LoanListForm());
 
         private void btnNavReturn_Click(object sender, EventArgs e) =>
-            OpenModule(btnNavReturn, "↩   Book Return", new ReturnForm());
+            OpenModuleInline(btnNavReturn, "↩   Return History", new ReturnListForm());
 
         private void btnNavReserve_Click(object sender, EventArgs e) =>
-            OpenModule(btnNavReserve, "🔖   Reserve Book", new ReservationForm());
+            OpenModuleInline(btnNavReserve, "🔖   Reservations", new ReservationListForm());
 
         private void btnNavInquiry_Click(object sender, EventArgs e) =>
-            OpenModule(btnNavInquiry, "🔍   Book Inquiry", new InquiryForm());
+            OpenModuleInline(btnNavInquiry, " Inquiry Dashboard", new InquiryForm());
 
         private void btnNavExit_Click(object sender, EventArgs e) => Application.Exit();
     }
 }
+

@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class LoginForm
     {
@@ -36,7 +36,7 @@ namespace SarasaviLibrary.UI.Forms
 
             this.lblTitle.AutoSize  = false;
             this.lblTitle.Dock      = System.Windows.Forms.DockStyle.None;
-            this.lblTitle.Text      = "📚  Sarasavi Library";
+            this.lblTitle.Text      = "Sarasavi Library";
             this.lblTitle.Font      = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location  = new System.Drawing.Point(20, 15);
@@ -142,3 +142,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.Label   lblHint;
     }
 }
+

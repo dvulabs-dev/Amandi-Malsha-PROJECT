@@ -21,7 +21,7 @@ namespace SarasaviLibrary.UI.Forms
                 // Header
                 var pnlHeader = new Panel
                 {
-                    BackColor = Color.FromArgb(30, 58, 138),
+                    BackColor = Color.FromArgb(41, 54, 129),
                     Dock = DockStyle.Top,
                     Height = 60
                 };
@@ -59,7 +59,7 @@ namespace SarasaviLibrary.UI.Forms
                 {
                     Text = "OK",
                     Font = new Font("Segoe UI", 9F, FontStyle.Bold),
-                    BackColor = Color.FromArgb(30, 58, 138),
+                    BackColor = Color.FromArgb(41, 54, 129),
                     ForeColor = Color.White,
                     FlatStyle = FlatStyle.Flat,
                     Cursor = Cursors.Hand,

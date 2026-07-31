@@ -15,6 +15,11 @@ namespace SarasaviLibrary.UI.Forms
             this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
         }
 
+        public ReturnForm(string accessionNumber) : this()
+        {
+            txtAccessionNumber.Text = accessionNumber;
+        }
+
         private void btnReturn_Click(object sender, EventArgs e)
         {
             try

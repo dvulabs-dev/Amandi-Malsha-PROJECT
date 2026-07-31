@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class MainForm
     {
@@ -58,7 +58,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlLogo.Controls.Add(this.lblLibrarySub);
 
             this.lblLibraryName.AutoSize  = false;
-            this.lblLibraryName.Text      = "📚  SARASAVI";
+            this.lblLibraryName.Text      = "SARASAVI";
             this.lblLibraryName.Font      = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblLibraryName.ForeColor = System.Drawing.Color.White;
             this.lblLibraryName.Location  = new System.Drawing.Point(14, 16);
@@ -129,13 +129,13 @@ namespace SarasaviLibrary.UI.Forms
 
             StyleNav(this.btnNavDashboard,    "   🏠   Dashboard",          8,   this.btnNavDashboard_Click);
             StyleSection(this.lblNavSectionReg, "REGISTRATION",              60);
-            StyleNav(this.btnNavRegisterUser, "   👤   Register Borrower",   82,  this.btnNavRegisterUser_Click);
-            StyleNav(this.btnNavRegisterBook, "   📗   Register Book",        126, this.btnNavRegisterBook_Click);
+            StyleNav(this.btnNavRegisterUser, "    Register Borrower",   82,  this.btnNavRegisterUser_Click);
+            StyleNav(this.btnNavRegisterBook, "    Register Book",        126, this.btnNavRegisterBook_Click);
             StyleSection(this.lblNavSectionTrans, "TRANSACTIONS",             178);
             StyleNav(this.btnNavLoan,         "   📖   Loan Book",            198, this.btnNavLoan_Click);
             StyleNav(this.btnNavReturn,       "   ↩   Return Book",           242, this.btnNavReturn_Click);
             StyleNav(this.btnNavReserve,      "   🔖   Reserve Book",         286, this.btnNavReserve_Click);
-            StyleNav(this.btnNavInquiry,      "   🔍   Book Inquiry",         330, this.btnNavInquiry_Click);
+            StyleNav(this.btnNavInquiry,      "    Book Inquiry",         330, this.btnNavInquiry_Click);
 
             // ══════════════════════════════════════════════════════════════
             // MAIN AREA
@@ -182,7 +182,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlWelcomeBanner.Controls.Add(this.lblWelcome);
 
             this.lblWelcome.AutoSize  = false;
-            this.lblWelcome.Text      = "Welcome to Sarasavi Library  👋";
+            this.lblWelcome.Text      = "Welcome to Sarasavi Library  ";
             this.lblWelcome.Font      = new System.Drawing.Font("Segoe UI", 17F, System.Drawing.FontStyle.Bold);
             this.lblWelcome.ForeColor = System.Drawing.Color.White;
             this.lblWelcome.Location  = new System.Drawing.Point(30, 18);
@@ -248,3 +248,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.FlowLayoutPanel flpStats;
     }
 }
+

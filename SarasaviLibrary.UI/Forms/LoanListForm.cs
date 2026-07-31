@@ -4,23 +4,22 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 using SarasaviLibrary.BusinessLogic.Services;
-using SarasaviLibrary.Models.Entities;
 
 namespace SarasaviLibrary.UI.Forms
 {
-    public partial class BorrowerListForm : Form
+    public partial class LoanListForm : Form
     {
-        private readonly UserService _userService;
-        private System.Collections.Generic.List<Borrower> _allBorrowers;
+        private readonly LoanService _loanService;
+        private System.Collections.Generic.List<ActiveLoanDto> _allLoans;
 
-        public BorrowerListForm()
+        public LoanListForm()
         {
             InitializeComponent();
-            _userService = new UserService();
-            _allBorrowers = new System.Collections.Generic.List<Borrower>();
+            _loanService = new LoanService();
+            _allLoans = new System.Collections.Generic.List<ActiveLoanDto>();
         }
 
-        private void BorrowerListForm_Load(object sender, EventArgs e)
+        private void LoanListForm_Load(object sender, EventArgs e)
         {
             UIThemeHelper.ApplyDashboardTheme(this);
             pnlHeader.BackColor = Color.FromArgb(41, 54, 129); // Dark blue banner
@@ -31,9 +30,9 @@ namespace SarasaviLibrary.UI.Forms
             lblSubtitle.ForeColor = Color.FromArgb(200, 215, 255); // Light blueish white
 
             // Style buttons to be smoothly rounded pills
-            btnAddBorrower.BackColor = Color.FromArgb(66, 116, 217); // Bright blue button on dark banner
-            btnAddBorrower.ForeColor = Color.White;
-            btnAddBorrower.Paint += RoundedButton_Paint;
+            btnAddLoan.BackColor = Color.FromArgb(66, 116, 217); // Bright blue button on dark banner
+            btnAddLoan.ForeColor = Color.White;
+            btnAddLoan.Paint += RoundedButton_Paint;
             btnReset.Paint += RoundedButton_Paint;
 
             SetupGrid();
@@ -70,41 +69,42 @@ namespace SarasaviLibrary.UI.Forms
 
         private void SetupGrid()
         {
-            dgvBorrowers.AutoGenerateColumns = false;
-            dgvBorrowers.Columns.Clear();
+            dgvLoans.AutoGenerateColumns = false;
+            dgvLoans.Columns.Clear();
             
-            dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "UserNumber", HeaderText = "ID", Name = "UserNumber", Width = 80 });
-            dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", HeaderText = "Name", Name = "Name", Width = 200 });
-            dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "NationalId", HeaderText = "NIC", Name = "NationalId", Width = 150 });
-            dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Sex", HeaderText = "Gender", Name = "Sex", Width = 100 });
-            dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Address", HeaderText = "Address", Name = "Address" });
-
-            var updateCol = new DataGridViewButtonColumn { HeaderText = "ACTIONS", Name = "Update", Text = "Edit", UseColumnTextForButtonValue = true, Width = 50 };
-            dgvBorrowers.Columns.Add(updateCol);
+            dgvLoans.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "AccessionNumber", HeaderText = "Accession #", Name = "AccessionNumber", Width = 120 });
+            dgvLoans.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BookTitle", HeaderText = "Book Title", Name = "BookTitle", Width = 200 });
+            dgvLoans.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BorrowerName", HeaderText = "Borrower", Name = "BorrowerName", Width = 150 });
             
-            var deleteCol = new DataGridViewButtonColumn { HeaderText = "", Name = "Delete", Text = "Delete", UseColumnTextForButtonValue = true, Width = 50 };
-            dgvBorrowers.Columns.Add(deleteCol);
+            var dueDateCol = new DataGridViewTextBoxColumn { DataPropertyName = "DueDate", HeaderText = "Due Date", Name = "DueDate", Width = 120 };
+            dueDateCol.DefaultCellStyle.Format = "dd MMM yyyy";
+            dgvLoans.Columns.Add(dueDateCol);
+            
+            dgvLoans.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Status", HeaderText = "Status", Name = "Status", Width = 100 });
 
-            dgvBorrowers.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 54, 129);
-            dgvBorrowers.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvBorrowers.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            dgvBorrowers.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 54, 129);
-            dgvBorrowers.DefaultCellStyle.SelectionBackColor = Color.White;
-            dgvBorrowers.DefaultCellStyle.SelectionForeColor = Color.FromArgb(30, 41, 59);
-            dgvBorrowers.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
-            dgvBorrowers.BackgroundColor = Color.FromArgb(245, 247, 250); // Blend with form background
+            var returnCol = new DataGridViewButtonColumn { HeaderText = "ACTIONS", Name = "Return", Text = "Return", UseColumnTextForButtonValue = true, Width = 90 };
+            dgvLoans.Columns.Add(returnCol);
+
+            dgvLoans.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 54, 129);
+            dgvLoans.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvLoans.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            dgvLoans.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(41, 54, 129);
+            dgvLoans.DefaultCellStyle.SelectionBackColor = Color.White;
+            dgvLoans.DefaultCellStyle.SelectionForeColor = Color.FromArgb(30, 41, 59);
+            dgvLoans.DefaultCellStyle.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
+            dgvLoans.BackgroundColor = Color.FromArgb(245, 247, 250); // Blend with form background
         }
 
         private void LoadData()
         {
             try
             {
-                _allBorrowers = _userService.GetAllBorrowers();
+                _allLoans = _loanService.GetAllActiveLoans();
                 FilterData();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error Loading Borrowers", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Error Loading Loans", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -113,22 +113,22 @@ namespace SarasaviLibrary.UI.Forms
             var query = txtSearch.Text.Trim().ToLower();
             if (string.IsNullOrEmpty(query))
             {
-                dgvBorrowers.DataSource = _allBorrowers.ToList();
+                dgvLoans.DataSource = _allLoans.ToList();
             }
             else
             {
-                dgvBorrowers.DataSource = _allBorrowers.Where(b => 
-                    b.Name.ToLower().Contains(query) || 
-                    b.NationalId.ToLower().Contains(query) ||
-                    b.UserNumber.ToString().Contains(query)).ToList();
+                dgvLoans.DataSource = _allLoans.Where(l => 
+                    l.BookTitle.ToLower().Contains(query) || 
+                    l.AccessionNumber.ToLower().Contains(query) ||
+                    l.BorrowerName.ToLower().Contains(query)).ToList();
             }
         }
 
-        private void btnAddBorrower_Click(object sender, EventArgs e)
+        private void btnAddLoan_Click(object sender, EventArgs e)
         {
-            var regForm = new UserRegistrationForm();
-            regForm.ShowDialog(this);
-            LoadData();
+            var loanForm = new LoanForm();
+            loanForm.ShowDialog(this);
+            LoadData(); // Refresh list after issuing a loan
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -142,54 +142,34 @@ namespace SarasaviLibrary.UI.Forms
             FilterData();
         }
 
-        private void dgvBorrowers_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+        private void dgvLoans_CellContentClick(object? sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                var columnName = dgvBorrowers.Columns[e.ColumnIndex].Name;
-                if (columnName == "Update" || columnName == "Delete")
+                var columnName = dgvLoans.Columns[e.ColumnIndex].Name;
+                if (columnName == "Return")
                 {
-                    var borrower = (Borrower)dgvBorrowers.Rows[e.RowIndex].DataBoundItem;
+                    var loanDto = (ActiveLoanDto)dgvLoans.Rows[e.RowIndex].DataBoundItem;
                     
-                    if (columnName == "Update")
-                    {
-                        var editForm = new UserRegistrationForm(borrower);
-                        editForm.ShowDialog(this);
-                        LoadData();
-                    }
-                    else if (columnName == "Delete")
-                    {
-                        var result = MessageBox.Show($"Are you sure you want to permanently delete {borrower.Name}?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                        if (result == DialogResult.Yes)
-                        {
-                            try
-                            {
-                                _userService.DeleteBorrower(borrower.Id);
-                                LoadData();
-                            }
-                            catch (Exception ex)
-                            {
-                                MessageBox.Show(ex.Message, "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            }
-                        }
-                    }
+                    var returnForm = new ReturnForm(loanDto.AccessionNumber);
+                    returnForm.ShowDialog(this);
+                    LoadData();
                 }
             }
         }
 
-        private void dgvBorrowers_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+        private void dgvLoans_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
         {
             if (e.Graphics == null) return;
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            // Determine if the cell is at the corners of the grid
-            bool isFirstVisibleCol = e.ColumnIndex == dgvBorrowers.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index;
-            bool isLastVisibleCol = e.ColumnIndex == dgvBorrowers.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None).Index;
+            bool isFirstVisibleCol = e.ColumnIndex == dgvLoans.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index;
+            bool isLastVisibleCol = e.ColumnIndex == dgvLoans.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None).Index;
             bool isHeader = e.RowIndex == -1;
-            bool isLastRow = e.RowIndex == dgvBorrowers.Rows.Count - 1;
+            bool isLastRow = e.RowIndex == dgvLoans.Rows.Count - 1;
 
-            if (dgvBorrowers.Rows.Count == 0 && isHeader)
+            if (dgvLoans.Rows.Count == 0 && isHeader)
             {
                 isLastRow = true;
             }
@@ -199,13 +179,11 @@ namespace SarasaviLibrary.UI.Forms
             bool isBottomLeft = isLastRow && isFirstVisibleCol;
             bool isBottomRight = isLastRow && isLastVisibleCol;
 
-            // Fill entire cell bounds with form background color to hide square corners
             using (var formBg = new SolidBrush(Color.FromArgb(245, 247, 250)))
             {
                 e.Graphics.FillRectangle(formBg, e.CellBounds);
             }
 
-            // Draw the cell's main background with rounded corners where applicable
             Color cellBgColor = isHeader ? Color.FromArgb(41, 54, 129) : Color.White;
             using (var path = GetCellPath(e.CellBounds, 12, isTopLeft, isTopRight, isBottomLeft, isBottomRight))
             using (var brush = new SolidBrush(cellBgColor))
@@ -229,7 +207,6 @@ namespace SarasaviLibrary.UI.Forms
                 return;
             }
 
-            // Draw faint bottom border to separate rows (only if not the last row)
             if (!isLastRow)
             {
                 using (var pen = new Pen(Color.FromArgb(238, 242, 246), 1))
@@ -238,43 +215,34 @@ namespace SarasaviLibrary.UI.Forms
                 }
             }
 
-            // Draw custom button or normal content
-            var colName = dgvBorrowers.Columns[e.ColumnIndex].Name;
-            if (colName == "Update" || colName == "Delete")
+            var colName = dgvLoans.Columns[e.ColumnIndex].Name;
+            var loanDto = (ActiveLoanDto)dgvLoans.Rows[e.RowIndex].DataBoundItem;
+
+            if (colName == "Return")
             {
-                int btnSize = 36;
-                int btnPaddingY = (e.CellBounds.Height - btnSize) / 2;
-                int btnPaddingX = (e.CellBounds.Width - btnSize) / 2;
-                var btnRect = new Rectangle(e.CellBounds.X + btnPaddingX, e.CellBounds.Y + btnPaddingY, btnSize, btnSize);
+                int btnPaddingY = 14;
+                int btnPaddingX = 10;
+                var btnRect = new Rectangle(e.CellBounds.X + btnPaddingX, e.CellBounds.Y + btnPaddingY, e.CellBounds.Width - (btnPaddingX * 2), e.CellBounds.Height - (btnPaddingY * 2));
                 
-                Color btnColor = colName == "Update" ? Color.FromArgb(66, 116, 217) : Color.FromArgb(241, 245, 249); 
-                Color textColor = colName == "Update" ? Color.White : Color.FromArgb(100, 116, 139);
+                Color btnColor = Color.FromArgb(16, 185, 129); // Emerald green for Return
+                Color textColor = Color.White;
 
                 using (var path = GetRoundedRect(btnRect, 8)) // smooth rounded corners
                 using (var btnBrush = new SolidBrush(btnColor))
                 {
                     e.Graphics.FillPath(btnBrush, path);
                 }
-                
-                if (colName == "Delete")
-                {
-                    using (var path = GetRoundedRect(btnRect, 8))
-                    using (var pen = new Pen(Color.FromArgb(203, 213, 225), 1))
-                    {
-                        e.Graphics.DrawPath(pen, path);
-                    }
-                }
 
-                string btnText = colName == "Update" ? "\uE70F" : "\uE74D";
-                using (var font = new Font("Segoe MDL2 Assets", 10F, FontStyle.Regular))
+                string btnText = "Return";
+                using (var font = new Font("Segoe UI", 8.5F, FontStyle.Bold))
                 using (var textBrush = new SolidBrush(textColor))
                 {
                     var size = e.Graphics.MeasureString(btnText, font);
-                    var textPt = new Point(btnRect.X + (btnRect.Width - (int)size.Width) / 2, btnRect.Y + (btnRect.Height - (int)size.Height) / 2 + 1);
+                    var textPt = new Point(btnRect.X + (btnRect.Width - (int)size.Width) / 2, btnRect.Y + (btnRect.Height - (int)size.Height) / 2);
                     e.Graphics.DrawString(btnText, font, textBrush, textPt);
                 }
             }
-            else if (colName == "Sex")
+            else if (colName == "Status")
             {
                 if (e.Value != null)
                 {
@@ -284,34 +252,58 @@ namespace SarasaviLibrary.UI.Forms
                         var size = e.Graphics.MeasureString(text, font);
                         var pillRect = new Rectangle(e.CellBounds.X + 15, e.CellBounds.Y + (e.CellBounds.Height - 24) / 2, (int)size.Width + 20, 24);
                         
+                        bool isOverdue = loanDto.IsOverdue;
+                        Color pillBgColor = isOverdue ? Color.FromArgb(254, 226, 226) : Color.FromArgb(226, 232, 240);
+                        Color pillTextColor = isOverdue ? Color.FromArgb(220, 38, 38) : Color.FromArgb(30, 41, 59);
+
                         using (var path = GetRoundedRect(pillRect, 12))
-                        using (var brush = new SolidBrush(Color.FromArgb(226, 232, 240)))
+                        using (var brush = new SolidBrush(pillBgColor))
                         {
                             e.Graphics.FillPath(brush, path);
                         }
                         
                         var textRect = new Rectangle(pillRect.X, pillRect.Y + 1, pillRect.Width, pillRect.Height);
                         using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Center })
-                        using (var brush = new SolidBrush(Color.FromArgb(30, 41, 59)))
+                        using (var brush = new SolidBrush(pillTextColor))
                         {
                             e.Graphics.DrawString(text, font, brush, textRect, sf);
                         }
                     }
                 }
             }
+            else if (colName == "DueDate")
+            {
+                if (e.Value != null)
+                {
+                    var textRect = new Rectangle(e.CellBounds.X + 15, e.CellBounds.Y, e.CellBounds.Width - 30, e.CellBounds.Height);
+                    using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
+                    {
+                        bool isOverdue = loanDto.IsOverdue;
+                        Color textColor = isOverdue ? Color.FromArgb(220, 38, 38) : Color.FromArgb(100, 116, 139);
+                        Font drawFont = new Font("Segoe UI", 9.5F, isOverdue ? FontStyle.Bold : FontStyle.Regular);
+                        
+                        string displayText = e.Value.ToString() ?? "";
+                        if (e.Value is DateTime dt)
+                            displayText = dt.ToString("dd MMM yyyy");
+                            
+                        e.Graphics.DrawString(displayText, drawFont, new SolidBrush(textColor), textRect, sf);
+                        drawFont.Dispose();
+                    }
+                }
+            }
             else
             {
-                // Standard text drawing with custom font/colors
+                // Standard text drawing
                 if (e.Value != null)
                 {
                     var textRect = new Rectangle(e.CellBounds.X + 15, e.CellBounds.Y, e.CellBounds.Width - 30, e.CellBounds.Height);
                     using (var font = new Font("Segoe UI", 9.5F, FontStyle.Regular))
                     using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
                     {
-                        var textColor = (colName == "Name") ? Color.FromArgb(41, 54, 129) : Color.FromArgb(100, 116, 139);
-                        Font drawFont = (colName == "Name") ? new Font(font, FontStyle.Bold) : font;
+                        var textColor = (colName == "BookTitle" || colName == "AccessionNumber") ? Color.FromArgb(41, 54, 129) : Color.FromArgb(100, 116, 139);
+                        Font drawFont = (colName == "BookTitle" || colName == "AccessionNumber") ? new Font(font, FontStyle.Bold) : font;
                         e.Graphics.DrawString(e.Value.ToString(), drawFont, new SolidBrush(textColor), textRect, sf);
-                        if (colName == "Name") drawFont.Dispose();
+                        if (colName == "BookTitle" || colName == "AccessionNumber") drawFont.Dispose();
                     }
                 }
             }

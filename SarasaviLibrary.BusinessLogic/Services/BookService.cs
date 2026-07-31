@@ -74,5 +74,45 @@ namespace SarasaviLibrary.BusinessLogic.Services
             using var context = new AppDbContext();
             return context.Titles.ToList();
         }
+
+        public void UpdateTitle(int id, string isbn, string name, string authorNames, string publisher, string classification, BookType bookType)
+        {
+            using var context = new AppDbContext();
+            var title = context.Titles.FirstOrDefault(t => t.TitleId == id);
+            if (title == null) throw new Exception("Title not found.");
+
+            // Check if another title has this ISBN
+            if (context.Titles.Any(t => t.ISBN == isbn && t.TitleId != id))
+            {
+                throw new Exception("Another title with this ISBN already exists.");
+            }
+
+            title.ISBN = isbn;
+            title.Name = name;
+            title.AuthorNames = authorNames;
+            title.Publisher = publisher;
+            
+            // If classification changes, should we recalculate BookNumberPrefix? For now, leave it.
+            title.Classification = classification;
+            title.BookType = bookType;
+
+            context.SaveChanges();
+        }
+
+        public void DeleteTitle(int id)
+        {
+            using var context = new AppDbContext();
+            var title = context.Titles.FirstOrDefault(t => t.TitleId == id);
+            if (title == null) throw new Exception("Title not found.");
+
+            // Optionally check for copies/loans before delete if needed, but EF will throw FK exception if copies are associated.
+            if (context.BookCopies.Any(c => c.TitleId == id))
+            {
+                throw new Exception("Cannot delete this book because it has registered copies. Please remove all copies first.");
+            }
+
+            context.Titles.Remove(title);
+            context.SaveChanges();
+        }
     }
 }

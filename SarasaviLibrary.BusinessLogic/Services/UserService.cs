@@ -44,5 +44,35 @@ namespace SarasaviLibrary.BusinessLogic.Services
             using var context = new AppDbContext();
             return context.Borrowers.ToList();
         }
+
+        public void UpdateBorrower(int id, string name, string address, Sex sex, string nationalId)
+        {
+            using var context = new AppDbContext();
+            var borrower = context.Borrowers.FirstOrDefault(b => b.Id == id);
+            if (borrower == null) throw new Exception("Borrower not found.");
+
+            // Check if another borrower has this NationalId
+            if (context.Borrowers.Any(b => b.NationalId == nationalId && b.Id != id))
+            {
+                throw new Exception("Another user with this National ID already exists.");
+            }
+
+            borrower.Name = name;
+            borrower.Address = address;
+            borrower.Sex = sex;
+            borrower.NationalId = nationalId;
+
+            context.SaveChanges();
+        }
+
+        public void DeleteBorrower(int id)
+        {
+            using var context = new AppDbContext();
+            var borrower = context.Borrowers.FirstOrDefault(b => b.Id == id);
+            if (borrower == null) throw new Exception("Borrower not found.");
+
+            context.Borrowers.Remove(borrower);
+            context.SaveChanges();
+        }
     }
 }

@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class UserRegistrationForm
     {
@@ -40,7 +40,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Controls.Add(this.lblSubtitle);
 
-            this.lblTitle.Text      = "👤  Borrower Registration";
+            this.lblTitle.Text      = "Borrower Registration";
             this.lblTitle.Font      = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location  = new System.Drawing.Point(18, 12);
@@ -124,7 +124,7 @@ namespace SarasaviLibrary.UI.Forms
 
             // Note
             this.lblNote.AutoSize  = false;
-            this.lblNote.Text      = "ℹ  After registration, the User Number will be shown — note it for loans.";
+            this.lblNote.Text      = "After registration, the User Number will be shown — note it for loans.";
             this.lblNote.Font      = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Italic);
             this.lblNote.ForeColor = System.Drawing.Color.FromArgb(30, 80, 160);
             this.lblNote.Location  = new System.Drawing.Point(25, 278);
@@ -178,3 +178,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.Button  btnRegister;
     }
 }
+

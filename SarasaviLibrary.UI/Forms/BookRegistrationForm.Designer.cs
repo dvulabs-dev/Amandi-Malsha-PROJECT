@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class BookRegistrationForm
     {
@@ -44,7 +44,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Controls.Add(this.lblSubtitle);
 
-            this.lblTitle.Text      = "📗  Book Registration";
+            this.lblTitle.Text      = "Book Registration";
             this.lblTitle.Font      = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location  = new System.Drawing.Point(18, 12);
@@ -218,3 +218,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.Button       btnRegister;
     }
 }
+

@@ -7,6 +7,26 @@ using SarasaviLibrary.Models.Enums;
 
 namespace SarasaviLibrary.BusinessLogic.Services
 {
+    public class ActiveLoanDto
+    {
+        public int LoanId { get; set; }
+        public string AccessionNumber { get; set; } = string.Empty;
+        public string BookTitle { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public bool IsOverdue => DueDate < DateTime.Now;
+    }
+
+    public class ReturnedLoanDto
+    {
+        public int LoanId { get; set; }
+        public string AccessionNumber { get; set; } = string.Empty;
+        public string BookTitle { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public string ReturnDate { get; set; } = string.Empty;
+    }
+
     /// <summary>
     /// Result returned by CheckLoan – no data is saved, purely informational.
     /// </summary>
@@ -29,6 +49,25 @@ namespace SarasaviLibrary.BusinessLogic.Services
 
     public class LoanService
     {
+        public System.Collections.Generic.List<ActiveLoanDto> GetAllActiveLoans()
+        {
+            using var context = new AppDbContext();
+            return context.Loans
+                .Include(l => l.BookCopy).ThenInclude(c => c.Title)
+                .Include(l => l.Borrower)
+                .Where(l => l.Status == LoanStatus.Active)
+                .Select(l => new ActiveLoanDto
+                {
+                    LoanId = l.LoanId,
+                    AccessionNumber = l.BookCopy.AccessionNumber,
+                    BookTitle = l.BookCopy.Title != null ? l.BookCopy.Title.Name : "Unknown",
+                    BorrowerName = l.Borrower.Name,
+                    DueDate = l.DueDate,
+                    Status = l.Status.ToString()
+                })
+                .ToList();
+        }
+
         /// <summary>
         /// Read-only check: validates all business rules and returns a result object.
         /// Nothing is written to the database.
@@ -195,7 +234,38 @@ namespace SarasaviLibrary.BusinessLogic.Services
             }
             
             context.SaveChanges();
+            context.SaveChanges();
             return message;
+        }
+
+        public System.Collections.Generic.List<ReturnedLoanDto> GetAllReturnedLoans()
+        {
+            using var context = new AppDbContext();
+            return context.Loans
+                .Include(l => l.BookCopy).ThenInclude(c => c.Title)
+                .Include(l => l.Borrower)
+                .Where(l => l.Status == LoanStatus.Returned)
+                .OrderByDescending(l => l.ReturnDate)
+                .Select(l => new ReturnedLoanDto
+                {
+                    LoanId = l.LoanId,
+                    AccessionNumber = l.BookCopy.AccessionNumber,
+                    BookTitle = l.BookCopy.Title != null ? l.BookCopy.Title.Name : "Unknown",
+                    BorrowerName = l.Borrower.Name,
+                    ReturnDate = l.ReturnDate.HasValue ? l.ReturnDate.Value.ToShortDateString() : ""
+                })
+                .ToList();
+        }
+
+        public void DeleteLoan(int id)
+        {
+            using var context = new AppDbContext();
+            var loan = context.Loans.Find(id);
+            if (loan != null)
+            {
+                context.Loans.Remove(loan);
+                context.SaveChanges();
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class ReturnForm
     {
@@ -78,7 +78,7 @@ namespace SarasaviLibrary.UI.Forms
             this.txtAccessionNumber.TabIndex    = 1;
 
             this.lblNote.AutoSize  = false;
-            this.lblNote.Text      = "ℹ  If the title has pending reservations, the system will\r\n   automatically notify the next borrower in the queue.";
+            this.lblNote.Text      = "If the title has pending reservations, the system will\r\n   automatically notify the next borrower in the queue.";
             this.lblNote.Font      = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Italic);
             this.lblNote.ForeColor = System.Drawing.Color.FromArgb(30, 80, 160);
             this.lblNote.Location  = new System.Drawing.Point(25, 104);
@@ -124,3 +124,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.Button  btnReturn;
     }
 }
+

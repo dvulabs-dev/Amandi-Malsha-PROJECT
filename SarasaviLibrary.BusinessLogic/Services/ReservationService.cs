@@ -46,5 +46,32 @@ namespace SarasaviLibrary.BusinessLogic.Services
             
             return reservation;
         }
+
+        public object[] GetAllReservationsDetail()
+        {
+            using var context = new AppDbContext();
+            return context.Reservations
+                .OrderByDescending(r => r.ReservationDate)
+                .Select(r => new
+                {
+                    ReservationId = r.ReservationId,
+                    Date = r.ReservationDate.ToShortDateString(),
+                    BookTitle = r.Title.Name,
+                    BorrowerName = r.Borrower.Name,
+                    Status = r.Status.ToString()
+                })
+                .ToArray();
+        }
+
+        public void DeleteReservation(int id)
+        {
+            using var context = new AppDbContext();
+            var res = context.Reservations.Find(id);
+            if (res != null)
+            {
+                context.Reservations.Remove(res);
+                context.SaveChanges();
+            }
+        }
     }
 }

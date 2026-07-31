@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class LoanForm
     {
@@ -122,7 +122,7 @@ namespace SarasaviLibrary.UI.Forms
 
             // Check button
             this.btnCheck.Name             = "btnCheck";
-            this.btnCheck.Text             = "🔍  Check Status";
+            this.btnCheck.Text             = "Check Status";
             this.btnCheck.Font             = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnCheck.BackColor        = System.Drawing.Color.FromArgb(30, 58, 138);
             this.btnCheck.ForeColor        = System.Drawing.Color.White;
@@ -153,7 +153,7 @@ namespace SarasaviLibrary.UI.Forms
             this.lblStatusHeader.Size      = new System.Drawing.Size(390, 15);
             this.lblStatusHeader.AutoSize  = false;
 
-            this.lblBorrowerIcon.Text     = "👤";
+            this.lblBorrowerIcon.Text     = "";
             this.lblBorrowerIcon.Font     = new System.Drawing.Font("Segoe UI", 11F);
             this.lblBorrowerIcon.Location = new System.Drawing.Point(8, 25);
             this.lblBorrowerIcon.Size     = new System.Drawing.Size(28, 20);
@@ -180,7 +180,7 @@ namespace SarasaviLibrary.UI.Forms
             this.lblOverdueRow.Size      = new System.Drawing.Size(370, 16);
             this.lblOverdueRow.AutoSize  = false;
 
-            this.lblBookIcon.Text     = "📗";
+            this.lblBookIcon.Text     = "";
             this.lblBookIcon.Font     = new System.Drawing.Font("Segoe UI", 11F);
             this.lblBookIcon.Location = new System.Drawing.Point(8, 86);
             this.lblBookIcon.Size     = new System.Drawing.Size(28, 20);
@@ -238,7 +238,7 @@ namespace SarasaviLibrary.UI.Forms
             this.btnAccept.Click           += new System.EventHandler(this.btnAccept_Click);
 
             this.btnCancel.Name             = "btnCancel";
-            this.btnCancel.Text             = "❌  Cancel";
+            this.btnCancel.Text             = "  Cancel";
             this.btnCancel.Font             = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnCancel.BackColor        = System.Drawing.Color.FromArgb(185, 28, 28);
             this.btnCancel.ForeColor        = System.Drawing.Color.White;
@@ -313,3 +313,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.Button  btnCancel;
     }
 }
+

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
 using SarasaviLibrary.BusinessLogic.Services;
@@ -17,6 +17,7 @@ namespace SarasaviLibrary.UI.Forms
         {
             InitializeComponent();
             _loanService = new LoanService();
+            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
         }
 
         // ── Step 1: Check Status ─────────────────────────────────────────
@@ -187,3 +188,4 @@ namespace SarasaviLibrary.UI.Forms
         }
     }
 }
+

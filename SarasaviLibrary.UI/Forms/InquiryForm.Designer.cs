@@ -1,4 +1,4 @@
-namespace SarasaviLibrary.UI.Forms
+﻿namespace SarasaviLibrary.UI.Forms
 {
     partial class InquiryForm
     {
@@ -72,7 +72,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Controls.Add(this.lblSubtitle);
 
-            this.lblTitle.Text      = "🔍  Book & Borrower Inquiry";
+            this.lblTitle.Text      = "Book & Borrower Inquiry";
             this.lblTitle.Font      = new System.Drawing.Font("Segoe UI", 13F, System.Drawing.FontStyle.Bold);
             this.lblTitle.ForeColor = System.Drawing.Color.White;
             this.lblTitle.Location  = new System.Drawing.Point(18, 10);
@@ -98,7 +98,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlSearch.Controls.Add(this.lblSearch);
 
             this.lblSearch.AutoSize  = false;
-            this.lblSearch.Text      = "📗  Book Search (by title, author, or accession number):";
+            this.lblSearch.Text      = "Book Search (by title, author, or accession number):";
             this.lblSearch.Font      = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.lblSearch.ForeColor = System.Drawing.Color.FromArgb(30, 58, 138);
             this.lblSearch.Location  = new System.Drawing.Point(14, 8);
@@ -112,7 +112,7 @@ namespace SarasaviLibrary.UI.Forms
             this.txtSearch.TabIndex    = 1;
 
             this.btnSearch.Name             = "btnSearch";
-            this.btnSearch.Text             = "🔍 Search";
+            this.btnSearch.Text             = " Search";
             this.btnSearch.Font             = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnSearch.BackColor        = System.Drawing.Color.FromArgb(30, 58, 138);
             this.btnSearch.ForeColor        = System.Drawing.Color.White;
@@ -163,7 +163,7 @@ namespace SarasaviLibrary.UI.Forms
             this.pnlBorrowerHeader.Height    = 34;
             this.pnlBorrowerHeader.Controls.Add(this.lblBorrowerSectionTitle);
 
-            this.lblBorrowerSectionTitle.Text      = "👤  Borrower Lookup — search by User Number or National ID";
+            this.lblBorrowerSectionTitle.Text      = "Borrower Lookup — search by User Number or National ID";
             this.lblBorrowerSectionTitle.Font      = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Bold);
             this.lblBorrowerSectionTitle.ForeColor = System.Drawing.Color.White;
             this.lblBorrowerSectionTitle.Location  = new System.Drawing.Point(12, 8);
@@ -194,7 +194,7 @@ namespace SarasaviLibrary.UI.Forms
             this.txtBorrowerSearch.TabIndex    = 4;
 
             this.btnBorrowerSearch.Name             = "btnBorrowerSearch";
-            this.btnBorrowerSearch.Text             = "🔍 Look Up";
+            this.btnBorrowerSearch.Text             = " Look Up";
             this.btnBorrowerSearch.Font             = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
             this.btnBorrowerSearch.BackColor        = System.Drawing.Color.FromArgb(15, 118, 110);
             this.btnBorrowerSearch.ForeColor        = System.Drawing.Color.White;
@@ -402,3 +402,4 @@ namespace SarasaviLibrary.UI.Forms
         private System.Windows.Forms.DataGridView   dgvLoans;
     }
 }
+

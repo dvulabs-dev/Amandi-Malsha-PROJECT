@@ -12,6 +12,12 @@ namespace SarasaviLibrary.UI.Forms
         {
             InitializeComponent();
             _loanService = new LoanService();
+            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
+        }
+
+        public ReturnForm(string accessionNumber) : this()
+        {
+            txtAccessionNumber.Text = accessionNumber;
         }
 
         private void btnReturn_Click(object sender, EventArgs e)
@@ -26,8 +32,8 @@ namespace SarasaviLibrary.UI.Forms
 
                 string message = _loanService.ReturnLoan(txtAccessionNumber.Text);
 
-                MessageBox.Show(message, "Return Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                txtAccessionNumber.Clear();
+                CustomMessageBox.Show(message, "Return Processed Successfully");
+                this.Close();
             }
             catch (Exception ex)
             {

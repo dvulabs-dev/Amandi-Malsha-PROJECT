@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SarasaviLibrary.Models.Enums;
 
 namespace SarasaviLibrary.Models.Entities
 {
@@ -11,7 +12,11 @@ namespace SarasaviLibrary.Models.Entities
         public string AuthorNames { get; set; } = string.Empty;
         public string Publisher { get; set; } = string.Empty;
         public string Classification { get; set; } = string.Empty;
+        public BookType BookType { get; set; } = BookType.Borrowable;
         
         public ICollection<BookCopy> Copies { get; set; } = new List<BookCopy>();
+
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public int CopyCount => Copies?.Count ?? 0;
     }
 }

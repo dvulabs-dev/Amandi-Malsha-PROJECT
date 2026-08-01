@@ -1,6 +1,6 @@
 namespace SarasaviLibrary.UI.Forms
 {
-    partial class BorrowerListForm
+    partial class BookListForm
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -15,15 +15,15 @@ namespace SarasaviLibrary.UI.Forms
 
         private void InitializeComponent()
         {
-            this.dgvBorrowers = new System.Windows.Forms.DataGridView();
+            this.dgvBooks = new System.Windows.Forms.DataGridView();
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.lblSubtitle = new System.Windows.Forms.Label();
-            this.btnAddBorrower = new System.Windows.Forms.Button();
+            this.btnAddBook = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlSearch = new System.Windows.Forms.Panel();
             this.btnReset = new System.Windows.Forms.Button();
             this.txtSearch = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowers)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).BeginInit();
             this.pnlHeader.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             this.SuspendLayout();
@@ -31,7 +31,7 @@ namespace SarasaviLibrary.UI.Forms
             // pnlHeader
             // 
             this.pnlHeader.Controls.Add(this.lblSubtitle);
-            this.pnlHeader.Controls.Add(this.btnAddBorrower);
+            this.pnlHeader.Controls.Add(this.btnAddBook);
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
@@ -45,24 +45,24 @@ namespace SarasaviLibrary.UI.Forms
             this.lblSubtitle.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblSubtitle.Location = new System.Drawing.Point(23, 45);
             this.lblSubtitle.Name = "lblSubtitle";
-            this.lblSubtitle.Size = new System.Drawing.Size(152, 15);
+            this.lblSubtitle.Size = new System.Drawing.Size(155, 15);
             this.lblSubtitle.TabIndex = 3;
-            this.lblSubtitle.Text = "Manage registered borrowers";
+            this.lblSubtitle.Text = "Manage library titles and copies";
             // 
-            // btnAddBorrower
+            // btnAddBook
             // 
-            this.btnAddBorrower.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddBorrower.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnAddBorrower.FlatAppearance.BorderSize = 0;
-            this.btnAddBorrower.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAddBorrower.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnAddBorrower.Location = new System.Drawing.Point(720, 20);
-            this.btnAddBorrower.Name = "btnAddBorrower";
-            this.btnAddBorrower.Size = new System.Drawing.Size(160, 40);
-            this.btnAddBorrower.TabIndex = 2;
-            this.btnAddBorrower.Text = "+ Add Borrower";
-            this.btnAddBorrower.UseVisualStyleBackColor = false;
-            this.btnAddBorrower.Click += new System.EventHandler(this.btnAddBorrower_Click);
+            this.btnAddBook.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAddBook.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnAddBook.FlatAppearance.BorderSize = 0;
+            this.btnAddBook.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAddBook.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnAddBook.Location = new System.Drawing.Point(720, 20);
+            this.btnAddBook.Name = "btnAddBook";
+            this.btnAddBook.Size = new System.Drawing.Size(160, 40);
+            this.btnAddBook.TabIndex = 2;
+            this.btnAddBook.Text = "+ Add Book";
+            this.btnAddBook.UseVisualStyleBackColor = false;
+            this.btnAddBook.Click += new System.EventHandler(this.btnAddBook_Click);
             // 
             // lblTitle
             // 
@@ -70,9 +70,9 @@ namespace SarasaviLibrary.UI.Forms
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblTitle.Location = new System.Drawing.Point(20, 10);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(131, 32);
+            this.lblTitle.Size = new System.Drawing.Size(201, 32);
             this.lblTitle.TabIndex = 1;
-            this.lblTitle.Text = "Borrowers";
+            this.lblTitle.Text = "Registered Books";
             // 
             // pnlSearch
             // 
@@ -105,52 +105,52 @@ namespace SarasaviLibrary.UI.Forms
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtSearch.Location = new System.Drawing.Point(26, 16);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.PlaceholderText = "Search borrowers...";
+            this.txtSearch.PlaceholderText = "Search books...";
             this.txtSearch.Size = new System.Drawing.Size(200, 27);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
-            // dgvBorrowers
+            // dgvBooks
             // 
-            this.dgvBorrowers.AllowUserToAddRows = false;
-            this.dgvBorrowers.AllowUserToDeleteRows = false;
-            this.dgvBorrowers.AllowUserToResizeRows = false;
-            this.dgvBorrowers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvBorrowers.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(231)))), ((int)(((byte)(230)))));
-            this.dgvBorrowers.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvBorrowers.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.dgvBorrowers.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.dgvBorrowers.ColumnHeadersHeight = 40;
-            this.dgvBorrowers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgvBorrowers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvBorrowers.EnableHeadersVisualStyles = false;
-            this.dgvBorrowers.Location = new System.Drawing.Point(20, 140);
-            this.dgvBorrowers.MultiSelect = false;
-            this.dgvBorrowers.Name = "dgvBorrowers";
-            this.dgvBorrowers.ReadOnly = true;
-            this.dgvBorrowers.RowHeadersVisible = false;
-            this.dgvBorrowers.RowTemplate.Height = 60;
-            this.dgvBorrowers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvBorrowers.Size = new System.Drawing.Size(860, 310);
-            this.dgvBorrowers.TabIndex = 1;
-            this.dgvBorrowers.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBorrowers_CellContentClick);
-            this.dgvBorrowers.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvBorrowers_CellPainting);
+            this.dgvBooks.AllowUserToAddRows = false;
+            this.dgvBooks.AllowUserToDeleteRows = false;
+            this.dgvBooks.AllowUserToResizeRows = false;
+            this.dgvBooks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvBooks.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(231)))), ((int)(((byte)(230)))));
+            this.dgvBooks.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvBooks.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.dgvBooks.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgvBooks.ColumnHeadersHeight = 40;
+            this.dgvBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dgvBooks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvBooks.EnableHeadersVisualStyles = false;
+            this.dgvBooks.Location = new System.Drawing.Point(20, 140);
+            this.dgvBooks.MultiSelect = false;
+            this.dgvBooks.Name = "dgvBooks";
+            this.dgvBooks.ReadOnly = true;
+            this.dgvBooks.RowHeadersVisible = false;
+            this.dgvBooks.RowTemplate.Height = 60;
+            this.dgvBooks.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvBooks.Size = new System.Drawing.Size(860, 310);
+            this.dgvBooks.TabIndex = 1;
+            this.dgvBooks.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvBooks_CellContentClick);
+            this.dgvBooks.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvBooks_CellPainting);
             // 
-            // BorrowerListForm
+            // BookListForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(231)))), ((int)(((byte)(230)))));
             this.ClientSize = new System.Drawing.Size(900, 450);
-            this.Controls.Add(this.dgvBorrowers);
+            this.Controls.Add(this.dgvBooks);
             this.Controls.Add(this.pnlSearch);
             this.Controls.Add(this.pnlHeader);
-            this.Name = "BorrowerListForm";
+            this.Name = "BookListForm";
             this.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Borrowers";
-            this.Load += new System.EventHandler(this.BorrowerListForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvBorrowers)).EndInit();
+            this.Text = "Registered Books";
+            this.Load += new System.EventHandler(this.BookListForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvBooks)).EndInit();
             this.pnlHeader.ResumeLayout(false);
             this.pnlHeader.PerformLayout();
             this.pnlSearch.ResumeLayout(false);
@@ -158,11 +158,11 @@ namespace SarasaviLibrary.UI.Forms
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.DataGridView dgvBorrowers;
+        private System.Windows.Forms.DataGridView dgvBooks;
         private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblSubtitle;
-        private System.Windows.Forms.Button btnAddBorrower;
+        private System.Windows.Forms.Button btnAddBook;
         private System.Windows.Forms.Panel pnlSearch;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Button btnReset;

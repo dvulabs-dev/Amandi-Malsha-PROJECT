@@ -289,7 +289,7 @@ namespace SarasaviLibrary.UI.Forms
             // lblStatActive
             // 
             this.lblStatActive.AutoSize = true;
-            this.lblStatActive.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblStatActive.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblStatActive.Location = new System.Drawing.Point(140, 120);
             this.lblStatActive.Name = "lblStatActive";
             this.lblStatActive.Size = new System.Drawing.Size(46, 19);
@@ -300,7 +300,7 @@ namespace SarasaviLibrary.UI.Forms
             // lblStatTotal
             // 
             this.lblStatTotal.AutoSize = true;
-            this.lblStatTotal.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblStatTotal.Font = new System.Drawing.Font("Segoe UI", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblStatTotal.Location = new System.Drawing.Point(5, 120);
             this.lblStatTotal.Name = "lblStatTotal";
             this.lblStatTotal.Size = new System.Drawing.Size(38, 19);
@@ -311,8 +311,8 @@ namespace SarasaviLibrary.UI.Forms
             // lblProfileRegDate
             // 
             this.lblProfileRegDate.AutoSize = true;
-            this.lblProfileRegDate.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProfileRegDate.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileRegDate.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileRegDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblProfileRegDate.Location = new System.Drawing.Point(280, 85);
             this.lblProfileRegDate.Name = "lblProfileRegDate";
             this.lblProfileRegDate.Size = new System.Drawing.Size(73, 17);
@@ -323,8 +323,8 @@ namespace SarasaviLibrary.UI.Forms
             // lblProfileSex
             // 
             this.lblProfileSex.AutoSize = true;
-            this.lblProfileSex.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProfileSex.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileSex.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileSex.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblProfileSex.Location = new System.Drawing.Point(5, 85);
             this.lblProfileSex.Name = "lblProfileSex";
             this.lblProfileSex.Size = new System.Drawing.Size(31, 17);
@@ -335,8 +335,8 @@ namespace SarasaviLibrary.UI.Forms
             // lblProfileAddress
             // 
             this.lblProfileAddress.AutoSize = true;
-            this.lblProfileAddress.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProfileAddress.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileAddress.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileAddress.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblProfileAddress.Location = new System.Drawing.Point(5, 60);
             this.lblProfileAddress.Name = "lblProfileAddress";
             this.lblProfileAddress.Size = new System.Drawing.Size(59, 17);
@@ -347,8 +347,8 @@ namespace SarasaviLibrary.UI.Forms
             // lblProfileNid
             // 
             this.lblProfileNid.AutoSize = true;
-            this.lblProfileNid.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProfileNid.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileNid.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileNid.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblProfileNid.Location = new System.Drawing.Point(280, 35);
             this.lblProfileNid.Name = "lblProfileNid";
             this.lblProfileNid.Size = new System.Drawing.Size(78, 17);
@@ -359,8 +359,8 @@ namespace SarasaviLibrary.UI.Forms
             // lblProfileUserNo
             // 
             this.lblProfileUserNo.AutoSize = true;
-            this.lblProfileUserNo.Font = new System.Drawing.Font("Segoe UI", 9.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProfileUserNo.ForeColor = System.Drawing.Color.Gray;
+            this.lblProfileUserNo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblProfileUserNo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(71)))), ((int)(((byte)(85)))), ((int)(((byte)(105)))));
             this.lblProfileUserNo.Location = new System.Drawing.Point(5, 35);
             this.lblProfileUserNo.Name = "lblProfileUserNo";
             this.lblProfileUserNo.Size = new System.Drawing.Size(56, 17);

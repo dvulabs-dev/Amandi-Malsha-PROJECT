@@ -81,11 +81,17 @@ namespace SarasaviLibrary.BusinessLogic.Services
         {
             using var context = new AppDbContext();
 
+            var matchingTitleIds = context.BookCopies
+                .Where(c => c.AccessionNumber.Contains(query))
+                .Select(c => c.TitleId)
+                .Distinct();
+
             var copies = context.BookCopies
                 .Include(c => c.Title)
-                .Where(c => c.AccessionNumber.Contains(query) ||
+                .Where(c => c.Title.BookNumberPrefix.Contains(query) ||
                             c.Title.Name.Contains(query) ||
-                            c.Title.AuthorNames.Contains(query))
+                            c.Title.AuthorNames.Contains(query) ||
+                            matchingTitleIds.Contains(c.TitleId))
                 .ToList();
 
             // Build a lookup: CopyId → UserNumber for all active loans
@@ -102,7 +108,9 @@ namespace SarasaviLibrary.BusinessLogic.Services
                 Publisher       = c.Title.Publisher,
                 Classification  = c.Title.Classification,
                 BookType        = c.Title.BookType.ToString(),
-                Availability    = c.Status.ToString(),
+                Availability    = c.Status == CopyStatus.OnLoan ? "In Loan" : 
+                                  c.Status == CopyStatus.Available ? "Borrowable" : 
+                                  c.Status.ToString(),
                 BorrowedByUserId = activeLoanMap.TryGetValue(c.CopyId, out int uid)
                                     ? uid.ToString()
                                     : string.Empty

@@ -26,8 +26,8 @@ namespace SarasaviLibrary.UI.Forms
             this.BackColor = Color.FromArgb(245, 247, 250); // Dashboard grey
             this.Padding = new Padding(25); // Gap from navbar and edges
             
-            pnlBookCard.BackColor = Color.Transparent;
-            pnlBorrowerCard.BackColor = Color.Transparent;
+            pnlBookCard.BackColor = Color.FromArgb(245, 247, 250);
+            pnlBorrowerCard.BackColor = Color.FromArgb(245, 247, 250);
 
             lblBookTitle.ForeColor = Color.FromArgb(41, 54, 129);
             lblBorrowerTitle.ForeColor = Color.FromArgb(41, 54, 129);
@@ -47,7 +47,7 @@ namespace SarasaviLibrary.UI.Forms
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BookNumber", HeaderText = "ACC #", Name = "BookNumber", Width = 90 });
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Title", HeaderText = "TITLE", Name = "Title", Width = 150 });
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Author", HeaderText = "AUTHOR", Name = "Author", Width = 120 });
-            dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Availability", HeaderText = "AVAILABILITY", Name = "Availability", Width = 110 });
+            dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Status", HeaderText = "STATUS", Name = "Status", Width = 220 });
             dgvBookResults.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BorrowedByUserId", HeaderText = "BORROWER ID", Name = "BorrowedByUserId", Width = 110 });
 
             // Borrower Loans Grid
@@ -60,11 +60,26 @@ namespace SarasaviLibrary.UI.Forms
 
             ApplyGridTheme(dgvBookResults);
             ApplyGridTheme(dgvBorrowerLoans);
+
+            EnableDoubleBuffering(dgvBookResults);
+            EnableDoubleBuffering(dgvBorrowerLoans);
+        }
+
+        private void EnableDoubleBuffering(DataGridView dgv)
+        {
+            typeof(DataGridView).InvokeMember(
+               "DoubleBuffered",
+               System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.SetProperty,
+               null,
+               dgv,
+               new object[] { true });
         }
 
         private void ApplyGridTheme(DataGridView dgv)
         {
             dgv.BackgroundColor = Color.White;
+            dgv.RowHeadersVisible = false;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 54, 129);
             dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -117,7 +132,10 @@ namespace SarasaviLibrary.UI.Forms
         {
             if (sender is not Panel pnl || e.Graphics == null) return;
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.Clear(pnl.Parent?.BackColor ?? Color.White);
+            
+            // Clear with the card's actual background color to avoid black corner artifacts
+            Color cardColor = Color.FromArgb(235, 240, 245);
+            e.Graphics.Clear(cardColor);
 
             var rect = new Rectangle(0, 0, pnl.Width - 1, pnl.Height - 1);
             int radius = pnl.Height / 2;
@@ -167,100 +185,115 @@ namespace SarasaviLibrary.UI.Forms
 
         private void DrawGridCells(DataGridView dgv, DataGridViewCellPaintingEventArgs e)
         {
-            if (e.Graphics == null) return;
+            if (e.Graphics == null || e.ColumnIndex < 0 || e.RowIndex < -1) return;
 
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            bool isFirstVisibleCol = e.ColumnIndex == dgv.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index;
-            bool isLastVisibleCol = e.ColumnIndex == dgv.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None).Index;
-            bool isHeader = e.RowIndex == -1;
-            bool isLastRow = e.RowIndex == dgv.Rows.Count - 1;
-
-            if (dgv.Rows.Count == 0 && isHeader)
+            try
             {
-                isLastRow = true;
-            }
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-            bool isTopLeft = isHeader && isFirstVisibleCol;
-            bool isTopRight = isHeader && isLastVisibleCol;
-            bool isBottomLeft = isLastRow && isFirstVisibleCol;
-            bool isBottomRight = isLastRow && isLastVisibleCol;
+                bool isFirstVisibleCol = e.ColumnIndex == 0;
+                bool isLastVisibleCol = e.ColumnIndex == dgv.Columns.Count - 1;
+                bool isHeader = e.RowIndex == -1;
+                bool isLastRow = e.RowIndex == dgv.Rows.Count - 1;
 
-            using (var parentBg = new SolidBrush(Color.White))
-            {
-                e.Graphics.FillRectangle(parentBg, e.CellBounds);
-            }
-
-            Color cellBgColor = isHeader ? Color.FromArgb(41, 54, 129) : Color.White;
-            using (var path = GetCellPath(e.CellBounds, 12, isTopLeft, isTopRight, isBottomLeft, isBottomRight))
-            using (var brush = new SolidBrush(cellBgColor))
-            {
-                e.Graphics.FillPath(brush, path);
-            }
-
-            if (isHeader)
-            {
-                if (e.Value != null)
+                if (dgv.Rows.Count == 0 && isHeader)
                 {
-                    var textRect = new Rectangle(e.CellBounds.X + 5, e.CellBounds.Y, e.CellBounds.Width - 10, e.CellBounds.Height);
-                    using (var font = new Font("Segoe UI", 9.5F, FontStyle.Bold))
-                    using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
-                    using (var textBrush = new SolidBrush(Color.White))
+                    isLastRow = true;
+                }
+
+                bool isTopLeft = isHeader && isFirstVisibleCol;
+                bool isTopRight = isHeader && isLastVisibleCol;
+                bool isBottomLeft = isLastRow && isFirstVisibleCol;
+                bool isBottomRight = isLastRow && isLastVisibleCol;
+
+                using (var parentBg = new SolidBrush(Color.White))
+                {
+                    e.Graphics.FillRectangle(parentBg, e.CellBounds);
+                }
+
+                if (isHeader || isLastRow)
+                {
+                    Color cellBgColor = isHeader ? Color.FromArgb(41, 54, 129) : Color.White;
+                    using (var path = GetCellPath(e.CellBounds, 12, isTopLeft, isTopRight, isBottomLeft, isBottomRight))
+                    using (var brush = new SolidBrush(cellBgColor))
                     {
-                        e.Graphics.DrawString(e.Value!.ToString()!.ToUpper(), font, textBrush, textRect, sf);
+                        e.Graphics.FillPath(brush, path);
                     }
                 }
-                
-                e.Handled = true;
-                return;
-            }
 
-            // Draw thin row separator
-            if (!isLastRow)
-            {
-                using (var pen = new Pen(Color.FromArgb(238, 242, 246), 1))
+                if (isHeader)
                 {
-                    e.Graphics.DrawLine(pen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right, e.CellBounds.Bottom - 1);
+                    if (e.Value != null)
+                    {
+                        var textRect = new Rectangle(e.CellBounds.X + 5, e.CellBounds.Y, Math.Max(1, e.CellBounds.Width - 10), Math.Max(1, e.CellBounds.Height));
+                        using (var font = new Font("Segoe UI", 9.5F, FontStyle.Bold))
+                        using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
+                        using (var textBrush = new SolidBrush(Color.White))
+                        {
+                            e.Graphics.DrawString(e.Value.ToString()?.ToUpper() ?? "", font, textBrush, textRect, sf);
+                        }
+                    }
+                    
+                    e.Handled = true;
+                    return;
                 }
-            }
 
-            var colName = dgv.Columns[e.ColumnIndex].Name;
-            
-            if (e.Value != null)
-            {
-                var textRect = new Rectangle(e.CellBounds.X + 5, e.CellBounds.Y, e.CellBounds.Width - 10, e.CellBounds.Height);
+                if (!isLastRow)
+                {
+                    using (var pen = new Pen(Color.FromArgb(238, 242, 246), 1))
+                    {
+                        e.Graphics.DrawLine(pen, e.CellBounds.Left, e.CellBounds.Bottom - 1, e.CellBounds.Right, e.CellBounds.Bottom - 1);
+                    }
+                }
+
+                var colName = dgv.Columns[e.ColumnIndex].Name;
+                
+                string text = e.Value?.ToString() ?? "";
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    text = "-";
+                }
+
+                var cellTextRect = new Rectangle(e.CellBounds.X + 5, e.CellBounds.Y, Math.Max(1, e.CellBounds.Width - 10), Math.Max(1, e.CellBounds.Height));
                 using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Near })
                 {
-                    string text = e.Value.ToString() ?? "";
                     Color textColor = Color.FromArgb(100, 116, 139);
-                    Font drawFont = new Font("Segoe UI", 9.5F, FontStyle.Regular);
+                    FontStyle style = FontStyle.Regular;
 
                     if (text == "⚠️ OVERDUE" || text == "⚠ OVERDUE")
                     {
                         textColor = Color.FromArgb(220, 38, 38);
-                        drawFont = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+                        style = FontStyle.Bold;
                     }
-                    else if (colName == "Availability" && text == "Available")
+                    else if (colName == "Status" && text == "Borrowable")
                     {
                         textColor = Color.FromArgb(16, 185, 129); // Green
-                        drawFont = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+                        style = FontStyle.Bold;
                     }
-                    else if (colName == "Availability")
+                    else if (colName == "Status")
                     {
                         textColor = Color.FromArgb(245, 158, 11); // Orange/Amber
                     }
                     else if (colName == "Title" || colName == "BookTitle" || colName == "BookNumber" || colName == "AccessionNo")
                     {
                         textColor = Color.FromArgb(41, 54, 129);
-                        drawFont = new Font("Segoe UI", 9.5F, FontStyle.Bold);
+                        style = FontStyle.Bold;
                     }
 
-                    e.Graphics.DrawString(text, drawFont, new SolidBrush(textColor), textRect, sf);
-                    drawFont.Dispose();
+                    using (var drawFont = new Font("Segoe UI", 9.5F, style))
+                    using (var textBrush = new SolidBrush(textColor))
+                    {
+                        e.Graphics.DrawString(text, drawFont, textBrush, cellTextRect, sf);
+                    }
                 }
-            }
 
-            e.Handled = true;
+                e.Handled = true;
+            }
+            catch
+            {
+                // Fallback to default painting if anything fails
+                e.Handled = false;
+            }
         }
 
         private GraphicsPath GetCellPath(Rectangle rect, int radius, bool isTopLeft, bool isTopRight, bool isBottomLeft, bool isBottomRight)
@@ -316,7 +349,7 @@ namespace SarasaviLibrary.UI.Forms
                     BookNumber       = c.BookNumber,
                     Title            = c.Title,
                     Author           = c.Author,
-                    Availability     = c.Availability,
+                    Status           = c.Availability,
                     BorrowedByUserId = c.BorrowedByUserId
                 }).ToList();
             }
@@ -328,8 +361,10 @@ namespace SarasaviLibrary.UI.Forms
 
         private void btnToggleBook_Click(object? sender, EventArgs e)
         {
-            pnlBookCard.Visible = true;
             pnlBorrowerCard.Visible = false;
+            pnlBookCard.Visible = true;
+            pnlBookCard.BringToFront();
+            this.Invalidate(true);
             
             btnToggleBook.BackColor = Color.FromArgb(41, 54, 129);
             btnToggleBook.ForeColor = Color.White;
@@ -342,6 +377,8 @@ namespace SarasaviLibrary.UI.Forms
         {
             pnlBookCard.Visible = false;
             pnlBorrowerCard.Visible = true;
+            pnlBorrowerCard.BringToFront();
+            this.Invalidate(true);
             
             btnToggleBorrower.BackColor = Color.FromArgb(41, 54, 129);
             btnToggleBorrower.ForeColor = Color.White;
@@ -367,7 +404,7 @@ namespace SarasaviLibrary.UI.Forms
                     return;
                 }
 
-                lblProfileName.Text    = $"ðŸ‘¤  {result.Name}";
+                lblProfileName.Text    = $"{result.Name}";
                 lblProfileUserNo.Text  = $"User Number:   {result.UserNumber}";
                 lblProfileNid.Text     = $"National ID:   {result.NationalId}";
                 lblProfileAddress.Text = $"Address:       {result.Address}";
@@ -376,7 +413,7 @@ namespace SarasaviLibrary.UI.Forms
 
                 lblStatTotal.Text   = $"Total Loans: {result.TotalLoans}";
                 lblStatActive.Text  = $"Active: {result.ActiveLoans}";
-                lblStatOverdue.Text = result.OverdueLoans > 0 ? $"âš  Overdue: {result.OverdueLoans}" : "âœ” No Overdue";
+                lblStatOverdue.Text = result.OverdueLoans > 0 ? $"⚠ Overdue: {result.OverdueLoans}" : "✔ No Overdue";
                 lblStatOverdue.ForeColor = result.OverdueLoans > 0 ? Color.FromArgb(220, 38, 38) : Color.FromArgb(16, 185, 129);
 
                 pnlProfileStats.Visible = true;
@@ -386,7 +423,7 @@ namespace SarasaviLibrary.UI.Forms
                     AccessionNo  = l.AccessionNumber,
                     BookTitle    = l.BookTitle,
                     DueDate      = l.DueDate.ToShortDateString(),
-                    Status       = l.IsOverdue ? "âš  OVERDUE" : l.Status
+                    Status       = l.IsOverdue ? "⚠ OVERDUE" : l.Status
                 }).ToList();
 
                 dgvBorrowerLoans.Visible = true;

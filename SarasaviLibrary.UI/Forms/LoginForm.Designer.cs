@@ -161,7 +161,7 @@ namespace SarasaviLibrary.UI.Forms
             // 
             // btnLogin
             // 
-            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(15, 23, 42); // Dark button
+            this.btnLogin.BackColor = System.Drawing.Color.FromArgb(66, 133, 244); // Vibrant Blue button
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -171,7 +171,7 @@ namespace SarasaviLibrary.UI.Forms
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(315, 45);
             this.btnLogin.TabIndex = 8;
-            this.btnLogin.Text = "Login";
+            this.btnLogin.Text = "Sign In";
             this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
 

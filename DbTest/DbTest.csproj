@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\SarasaviLibrary.BusinessLogic\SarasaviLibrary.BusinessLogic.csproj" />
+    <ProjectReference Include="..\SarasaviLibrary.Models\SarasaviLibrary.Models.csproj" />
+    <ProjectReference Include="..\SarasaviLibrary.DataAccess\SarasaviLibrary.DataAccess.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

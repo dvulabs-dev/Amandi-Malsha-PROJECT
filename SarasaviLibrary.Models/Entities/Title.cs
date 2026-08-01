@@ -15,5 +15,8 @@ namespace SarasaviLibrary.Models.Entities
         public BookType BookType { get; set; } = BookType.Borrowable;
         
         public ICollection<BookCopy> Copies { get; set; } = new List<BookCopy>();
+
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
+        public int CopyCount => Copies?.Count ?? 0;
     }
 }

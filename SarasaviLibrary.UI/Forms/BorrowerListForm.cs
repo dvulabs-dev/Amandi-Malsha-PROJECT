@@ -79,10 +79,10 @@ namespace SarasaviLibrary.UI.Forms
             dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Sex", HeaderText = "Gender", Name = "Sex", Width = 100 });
             dgvBorrowers.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Address", HeaderText = "Address", Name = "Address" });
 
-            var updateCol = new DataGridViewButtonColumn { HeaderText = "ACTIONS", Name = "Update", Text = "Edit", UseColumnTextForButtonValue = true, Width = 50 };
+            var updateCol = new DataGridViewButtonColumn { HeaderText = "Update", Name = "Update", Text = "Edit", UseColumnTextForButtonValue = true, Width = 60 };
             dgvBorrowers.Columns.Add(updateCol);
             
-            var deleteCol = new DataGridViewButtonColumn { HeaderText = "", Name = "Delete", Text = "Delete", UseColumnTextForButtonValue = true, Width = 50 };
+            var deleteCol = new DataGridViewButtonColumn { HeaderText = "Delete", Name = "Delete", Text = "Delete", UseColumnTextForButtonValue = true, Width = 60 };
             dgvBorrowers.Columns.Add(deleteCol);
 
             dgvBorrowers.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 54, 129);

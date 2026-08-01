@@ -25,13 +25,30 @@ namespace SarasaviLibrary.UI.Forms
             this.txtPassword.Leave += (s, e) => this.pnlPasswordLine.BackColor = Color.LightGray;
         }
 
-        private void LoginForm_Load(object sender, EventArgs e)
+        private void LoginForm_Load(object? sender, EventArgs e)
         {
+            this.pnlLeft.BackColor = Color.FromArgb(66, 133, 244);
+            
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "login_illustration.png");
             if (File.Exists(imagePath))
             {
                 picIllustration.Image = Image.FromFile(imagePath);
             }
+
+            picIllustration.Paint += (s, pe) =>
+            {
+                pe.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                
+                using (var welcomeFont = new Font("Segoe UI", 24F, FontStyle.Regular))
+                using (var titleFont = new Font("Segoe UI", 26F, FontStyle.Bold))
+                using (var brush = new SolidBrush(Color.White))
+                {
+                    var sf = new StringFormat { Alignment = StringAlignment.Center };
+                    
+                    pe.Graphics.DrawString("Welcome", welcomeFont, brush, new PointF(pnlLeft.Width / 2, 40), sf);
+                    pe.Graphics.DrawString("SARASAVI LIBRARY", titleFont, brush, new PointF(pnlLeft.Width / 2, 90), sf);
+                }
+            };
         }
 
         private void BtnLogin_Paint(object? sender, PaintEventArgs e)

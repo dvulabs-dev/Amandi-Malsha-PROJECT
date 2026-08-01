@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using SarasaviLibrary.BusinessLogic.Services;
@@ -17,7 +17,44 @@ namespace SarasaviLibrary.UI.Forms
         {
             InitializeComponent();
             _loanService = new LoanService();
-            this.Load += (s, e) => UIThemeHelper.ApplyDashboardTheme(this);
+            this.Load += (s, e) => 
+            {
+                UIThemeHelper.ApplyDashboardTheme(this);
+                // Restore custom colors that UIThemeHelper overwrote
+                btnAccept.BackColor = Color.FromArgb(22, 163, 74);
+                btnCancel.BackColor = Color.FromArgb(185, 28, 28);
+                
+                // Add smooth rounded corners
+                btnCheck.Paint += RoundedButton_Paint;
+                btnAccept.Paint += RoundedButton_Paint;
+                btnCancel.Paint += RoundedButton_Paint;
+            };
+        }
+
+        private void RoundedButton_Paint(object? sender, PaintEventArgs e)
+        {
+            if (sender is not Button btn || e.Graphics == null) return;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.Clear(btn.Parent?.BackColor ?? Color.White);
+
+            var rect = new Rectangle(0, 0, btn.Width - 1, btn.Height - 1);
+            int radius = 8; 
+
+            using (var path = new System.Drawing.Drawing2D.GraphicsPath())
+            {
+                path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
+                path.AddArc(rect.Right - radius, rect.Y, radius, radius, 270, 90);
+                path.AddArc(rect.Right - radius, rect.Bottom - radius, radius, radius, 0, 90);
+                path.AddArc(rect.X, rect.Bottom - radius, radius, radius, 90, 90);
+                path.CloseFigure();
+
+                using (var brush = new SolidBrush(btn.BackColor))
+                {
+                    e.Graphics.FillPath(brush, path);
+                }
+            }
+
+            TextRenderer.DrawText(e.Graphics, btn.Text, btn.Font, rect, btn.ForeColor, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
         }
 
         // ── Step 1: Check Status ─────────────────────────────────────────

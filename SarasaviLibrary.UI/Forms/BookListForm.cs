@@ -74,15 +74,16 @@ namespace SarasaviLibrary.UI.Forms
             dgvBooks.Columns.Clear();
             
             dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BookNumberPrefix", HeaderText = "Prefix", Name = "BookNumberPrefix", Width = 80 });
+            dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ISBN", HeaderText = "ISBN", Name = "ISBN", Width = 120 });
             dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Name", HeaderText = "Title", Name = "Name", Width = 200 });
             dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "AuthorNames", HeaderText = "Author", Name = "AuthorNames", Width = 150 });
-            dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Classification", HeaderText = "Classification", Name = "Classification", Width = 150 });
             dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BookType", HeaderText = "Type", Name = "BookType" });
+            dgvBooks.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "CopyCount", HeaderText = "Copies", Name = "CopyCount", Width = 80 });
 
-            var updateCol = new DataGridViewButtonColumn { HeaderText = "ACTIONS", Name = "Update", Text = "Edit", UseColumnTextForButtonValue = true, Width = 50 };
+            var updateCol = new DataGridViewButtonColumn { HeaderText = "Update", Name = "Update", Text = "Edit", UseColumnTextForButtonValue = true, Width = 60 };
             dgvBooks.Columns.Add(updateCol);
             
-            var deleteCol = new DataGridViewButtonColumn { HeaderText = "", Name = "Delete", Text = "Delete", UseColumnTextForButtonValue = true, Width = 50 };
+            var deleteCol = new DataGridViewButtonColumn { HeaderText = "Delete", Name = "Delete", Text = "Delete", UseColumnTextForButtonValue = true, Width = 60 };
             dgvBooks.Columns.Add(deleteCol);
 
             dgvBooks.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 54, 129);
@@ -120,6 +121,7 @@ namespace SarasaviLibrary.UI.Forms
                 dgvBooks.DataSource = _allTitles.Where(t => 
                     t.Name.ToLower().Contains(query) || 
                     t.BookNumberPrefix.ToLower().Contains(query) ||
+                    t.ISBN.ToLower().Contains(query) ||
                     t.AuthorNames.ToLower().Contains(query)).ToList();
             }
         }

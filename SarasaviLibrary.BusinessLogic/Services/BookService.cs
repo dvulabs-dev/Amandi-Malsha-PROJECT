@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using SarasaviLibrary.DataAccess.Contexts;
 using SarasaviLibrary.Models.Entities;
 using SarasaviLibrary.Models.Enums;
@@ -72,7 +73,7 @@ namespace SarasaviLibrary.BusinessLogic.Services
         public System.Collections.Generic.List<Title> GetAllTitles()
         {
             using var context = new AppDbContext();
-            return context.Titles.ToList();
+            return context.Titles.Include(t => t.Copies).ToList();
         }
 
         public void UpdateTitle(int id, string isbn, string name, string authorNames, string publisher, string classification, BookType bookType)

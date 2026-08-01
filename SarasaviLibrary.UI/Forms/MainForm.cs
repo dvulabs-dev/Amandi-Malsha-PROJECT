@@ -376,7 +376,8 @@ namespace SarasaviLibrary.UI.Forms
             
             if (btn.Tag != null)
             {
-                var parts = btn.Tag.ToString().Split('|');
+                string tagStr = btn.Tag.ToString() ?? "";
+                var parts = tagStr.Split('|');
                 if (parts.Length == 2)
                 {
                     icon = parts[0];
@@ -384,7 +385,7 @@ namespace SarasaviLibrary.UI.Forms
                 }
                 else
                 {
-                    text = btn.Tag.ToString();
+                    text = tagStr;
                 }
             }
 

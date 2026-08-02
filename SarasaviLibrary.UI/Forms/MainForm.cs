@@ -736,6 +736,15 @@ namespace SarasaviLibrary.UI.Forms
             OpenModuleInline(btnNavInquiry, " Inquiry Dashboard", new InquiryForm());
 
         private void btnNavExit_Click(object sender, EventArgs e) => Application.Exit();
+
+        /// <summary>
+        /// Called by embedded child forms (e.g. ReservationListForm) to switch the
+        /// main content panel to the Active Loans screen with fresh data.
+        /// </summary>
+        public void NavigateToActiveLoans()
+        {
+            btnNavLoan_Click(btnNavLoan, EventArgs.Empty);
+        }
     }
 }
 

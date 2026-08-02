@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -9,7 +10,7 @@ namespace SarasaviLibrary.UI.Forms
     public partial class ReservationListForm : Form
     {
         private readonly ReservationService _reservationService;
-        private object[] _allReservations = Array.Empty<object>();
+        private List<ReservationDetailDto> _allReservations = new List<ReservationDetailDto>();
 
         public ReservationListForm()
         {
@@ -44,7 +45,10 @@ namespace SarasaviLibrary.UI.Forms
             dgvReservations.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "ReservationDate", HeaderText = "Date", Name = "ReservationDate", Width = 120 });
             dgvReservations.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BookTitle", HeaderText = "Book Title", Name = "BookTitle", Width = 250 });
             dgvReservations.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "BorrowerName", HeaderText = "Borrower Name", Name = "BorrowerName", Width = 200 });
-            dgvReservations.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Status", HeaderText = "Status", Name = "Status", Width = 150 });
+            dgvReservations.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Status", HeaderText = "Status", Name = "Status", Width = 160 });
+
+            var activateCol = new DataGridViewButtonColumn { HeaderText = "ACTION", Name = "ActivateLoan", Text = "Activate Loan", UseColumnTextForButtonValue = true, Width = 120 };
+            dgvReservations.Columns.Add(activateCol);
 
             var deleteCol = new DataGridViewButtonColumn { HeaderText = "", Name = "Delete", Text = "Delete", UseColumnTextForButtonValue = true, Width = 50 };
             dgvReservations.Columns.Add(deleteCol);
@@ -64,6 +68,8 @@ namespace SarasaviLibrary.UI.Forms
             try
             {
                 _allReservations = _reservationService.GetAllReservationsDetail();
+                // Re-assign a new list instance so WinForms DataGridView refreshes properly
+                dgvReservations.DataSource = null;
                 dgvReservations.DataSource = _allReservations;
             }
             catch (Exception ex)
@@ -84,17 +90,68 @@ namespace SarasaviLibrary.UI.Forms
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
                 var columnName = dgvReservations.Columns[e.ColumnIndex].Name;
+                var res = dgvReservations.Rows[e.RowIndex].DataBoundItem as ReservationDetailDto;
+                if (res == null) return;
 
-                if (columnName == "Delete")
+                if (columnName == "ActivateLoan")
                 {
-                    dynamic res = dgvReservations.Rows[e.RowIndex].DataBoundItem;
-                    int id = res.ReservationId;
-                    var result = MessageBox.Show($"Are you sure you want to permanently delete this reservation?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (res.Status != "ReadyForPickup")
+                    {
+                        MessageBox.Show(
+                            "This reservation cannot be activated yet.\n\n" +
+                            "The loan can only be activated once the book has been returned and the reservation status is 'Ready for Pickup'.",
+                            "Cannot Activate",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                        return;
+                    }
+
+                    var confirm = MessageBox.Show(
+                        $"Activate loan for \"{res.BookTitle}\" to borrower \"{res.BorrowerName}\"?\n\n" +
+                        "This will create an active loan record and mark the reservation as Fulfilled.",
+                        "Confirm Loan Activation",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                    if (confirm == DialogResult.Yes)
+                    {
+                        try
+                        {
+                            _reservationService.ActivateReservationLoan(res.ReservationId);
+                            LoadData(); // Refresh reservations table first
+
+                            // Ask librarian if they want to switch to Active Loans to see B's loan
+                            var goToLoans = MessageBox.Show(
+                                $"✅ Loan activated for {res.BorrowerName}!\n\n" +
+                                $"Book \"{res.BookTitle}\" is now checked out to them.\n\n" +
+                                "Would you like to open Active Loans to confirm?",
+                                "Loan Activated",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information);
+
+                            if (goToLoans == DialogResult.Yes)
+                            {
+                                // Navigate to Active Loans via the MainForm
+                                var mainForm = FindMainForm();
+                                mainForm?.NavigateToActiveLoans();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Activation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                else if (columnName == "Delete")
+                {
+                    var result = MessageBox.Show(
+                        $"Are you sure you want to permanently delete this reservation?",
+                        "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
                         try
                         {
-                            _reservationService.DeleteReservation(id);
+                            _reservationService.DeleteReservation(res.ReservationId);
                             LoadData();
                         }
                         catch (Exception ex)
@@ -104,6 +161,24 @@ namespace SarasaviLibrary.UI.Forms
                     }
                 }
             }
+        }
+
+        // --- Navigation helper ---
+
+        /// <summary>
+        /// Walks up the WinForms parent chain to find the hosting MainForm.
+        /// The ReservationListForm is embedded inline inside pnlContent of MainForm,
+        /// so its Parent is the panel, and the panel's Parent is the MainForm.
+        /// </summary>
+        private MainForm? FindMainForm()
+        {
+            Control? c = this.Parent;
+            while (c != null)
+            {
+                if (c is MainForm mf) return mf;
+                c = c.Parent;
+            }
+            return null;
         }
 
         // --- Custom Drawing ---
@@ -194,7 +269,44 @@ namespace SarasaviLibrary.UI.Forms
 
             var colName = dgvReservations.Columns[e.ColumnIndex].Name;
 
-            if (colName == "Delete")
+            // Determine row status for conditional rendering
+            string rowStatus = "";
+            if (e.RowIndex >= 0 && e.RowIndex < dgvReservations.Rows.Count)
+            {
+                var rowData = dgvReservations.Rows[e.RowIndex].DataBoundItem as ReservationDetailDto;
+                if (rowData != null) rowStatus = rowData.Status;
+            }
+
+            if (colName == "ActivateLoan")
+            {
+                bool isReady = rowStatus == "ReadyForPickup";
+                int btnPaddingY = 14;
+                int btnPaddingX = 10;
+                var btnRect = new Rectangle(e.CellBounds.X + btnPaddingX, e.CellBounds.Y + btnPaddingY,
+                    e.CellBounds.Width - (btnPaddingX * 2), e.CellBounds.Height - (btnPaddingY * 2));
+
+                // Green if ready, grey if not
+                Color btnColor = isReady ? Color.FromArgb(16, 185, 129) : Color.FromArgb(203, 213, 225);
+                Color btnTextColor = isReady ? Color.White : Color.FromArgb(148, 163, 184);
+
+                using (var path = GetRoundedRect(btnRect, 8))
+                using (var btnBrush = new SolidBrush(btnColor))
+                {
+                    e.Graphics.FillPath(btnBrush, path);
+                }
+
+                string activateText = "Activate Loan";
+                using (var font = new Font("Segoe UI", 8.5F, isReady ? FontStyle.Bold : FontStyle.Regular))
+                using (var textBrush = new SolidBrush(btnTextColor))
+                {
+                    var size = e.Graphics.MeasureString(activateText, font);
+                    var textPt = new PointF(
+                        btnRect.X + (btnRect.Width - size.Width) / 2,
+                        btnRect.Y + (btnRect.Height - size.Height) / 2);
+                    e.Graphics.DrawString(activateText, font, textBrush, textPt);
+                }
+            }
+            else if (colName == "Delete")
             {
                 int btnSize = 36;
                 int btnPaddingY = (e.CellBounds.Height - btnSize) / 2;
@@ -224,21 +336,39 @@ namespace SarasaviLibrary.UI.Forms
                 if (e.Value != null)
                 {
                     string status = e.Value.ToString() ?? "";
-                    using (var font = new Font("Segoe UI", 9F, FontStyle.Regular))
+                    // Show a friendly label for ReadyForPickup
+                    string displayStatus = status == "ReadyForPickup" ? "Ready for Pickup" : status;
+
+                    using (var font = new Font("Segoe UI", 8.5F, FontStyle.Bold))
                     {
-                        var size = e.Graphics.MeasureString(status, font);
-                        var pillRect = new Rectangle(e.CellBounds.X + 15, e.CellBounds.Y + (e.CellBounds.Height - 24) / 2, (int)size.Width + 20, 24);
+                        var size = e.Graphics.MeasureString(displayStatus, font);
+                        var pillRect = new Rectangle(e.CellBounds.X + 10, e.CellBounds.Y + (e.CellBounds.Height - 26) / 2, (int)size.Width + 20, 26);
                         
-                        Color pillBgColor = Color.FromArgb(226, 232, 240);
+                        Color pillBgColor = Color.FromArgb(226, 232, 240);   // default grey
                         Color pillTextColor = Color.FromArgb(30, 41, 59);
 
                         if (status == "Pending")
                         {
-                            pillBgColor = Color.FromArgb(254, 243, 199); // amber 100
-                            pillTextColor = Color.FromArgb(217, 119, 6); // amber 600
+                            pillBgColor = Color.FromArgb(254, 243, 199);     // amber 100
+                            pillTextColor = Color.FromArgb(180, 90, 0);      // amber dark
+                        }
+                        else if (status == "ReadyForPickup")
+                        {
+                            pillBgColor = Color.FromArgb(209, 250, 229);     // emerald 100
+                            pillTextColor = Color.FromArgb(4, 120, 87);      // emerald 700
+                        }
+                        else if (status == "Fulfilled")
+                        {
+                            pillBgColor = Color.FromArgb(219, 234, 254);     // blue 100
+                            pillTextColor = Color.FromArgb(29, 78, 216);     // blue 700
+                        }
+                        else if (status == "Cancelled")
+                        {
+                            pillBgColor = Color.FromArgb(254, 226, 226);     // red 100
+                            pillTextColor = Color.FromArgb(185, 28, 28);     // red 700
                         }
 
-                        using (var path = GetRoundedRect(pillRect, 12))
+                        using (var path = GetRoundedRect(pillRect, 13))
                         using (var brush = new SolidBrush(pillBgColor))
                         {
                             e.Graphics.FillPath(brush, path);
@@ -248,7 +378,7 @@ namespace SarasaviLibrary.UI.Forms
                         using (var sf = new StringFormat { LineAlignment = StringAlignment.Center, Alignment = StringAlignment.Center })
                         using (var brush = new SolidBrush(pillTextColor))
                         {
-                            e.Graphics.DrawString(status, font, brush, textRect, sf);
+                            e.Graphics.DrawString(displayStatus, font, brush, textRect, sf);
                         }
                     }
                 }

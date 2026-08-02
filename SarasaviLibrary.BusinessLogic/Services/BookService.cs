@@ -70,6 +70,33 @@ namespace SarasaviLibrary.BusinessLogic.Services
             context.SaveChanges();
         }
 
+        public void RemoveCopies(int titleId, int count)
+        {
+            using var context = new AppDbContext();
+
+            var title = context.Titles.Find(titleId);
+            if (title == null) throw new Exception("Title not found.");
+
+            // Only remove copies that are not currently on loan or reserved
+            var removable = context.BookCopies
+                .Where(c => c.TitleId == titleId &&
+                            (c.Status == CopyStatus.Available || c.Status == CopyStatus.ReferenceOnly))
+                .OrderByDescending(c => c.CopyId) // remove most-recently-added first
+                .Take(count)
+                .ToList();
+
+            if (removable.Count < count)
+            {
+                int active = count - removable.Count;
+                throw new Exception(
+                    $"Cannot remove {count} copy(ies) — {active} copy(ies) are currently on loan or reserved " +
+                    $"and cannot be deleted. Only {removable.Count} copy(ies) can be removed.");
+            }
+
+            context.BookCopies.RemoveRange(removable);
+            context.SaveChanges();
+        }
+
         public System.Collections.Generic.List<Title> GetAllTitles()
         {
             using var context = new AppDbContext();

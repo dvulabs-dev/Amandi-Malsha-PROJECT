@@ -9,6 +9,7 @@ namespace SarasaviLibrary.UI.Forms
     {
         private BookService _bookService;
         private int? _editingTitleId;
+        private int _currentCopyCount = 0;
 
         public BookRegistrationForm()
         {
@@ -20,15 +21,19 @@ namespace SarasaviLibrary.UI.Forms
         public BookRegistrationForm(SarasaviLibrary.Models.Entities.Title title) : this()
         {
             _editingTitleId = title.TitleId;
+            _currentCopyCount = title.Copies?.Count ?? 0;
             txtISBN.Text = title.ISBN;
             txtName.Text = title.Name;
             txtAuthor.Text = title.AuthorNames;
             txtPublisher.Text = title.Publisher;
             txtClassification.Text = title.Classification;
             chkReferenceOnly.Checked = title.BookType == BookType.ReferenceOnly;
-            
-            // Disable copies count since we're just editing title info
-            numCopies.Enabled = false;
+
+            // In edit mode: show the current count so the user can adjust up or down
+            numCopies.Minimum = 0;
+            numCopies.Maximum = 9999;
+            numCopies.Value = _currentCopyCount;
+            numCopies.Enabled = true;
 
             this.Load += (s, e) => {
                 this.Text = "Update Book Title";
@@ -38,8 +43,10 @@ namespace SarasaviLibrary.UI.Forms
                     {
                         foreach (Control inner in pnl.Controls)
                         {
-                            if (inner is Label lbl && lbl.Text.Contains("Register"))
-                                lbl.Text = "Update Book";
+                            if (inner is Label lbl && lbl.Text == "Number of Copies")
+                                lbl.Text = "Number of Copies";
+                            else if (inner is Label lbl2 && lbl2.Text.Contains("Register"))
+                                lbl2.Text = "Update Book";
                             else if (inner is Button btn && btn.Text.Contains("Register"))
                                 btn.Text = "Update";
                         }
@@ -74,7 +81,28 @@ namespace SarasaviLibrary.UI.Forms
                         txtClassification.Text,
                         bookType
                     );
-                    CustomMessageBox.Show($"Book Updated Successfully!", "Update Complete");
+
+                    int newCount = (int)numCopies.Value;
+                    int diff = newCount - _currentCopyCount;
+
+                    if (diff > 0)
+                    {
+                        _bookService.AddCopies(_editingTitleId.Value, diff, bookType);
+                        CustomMessageBox.Show(
+                            $"Book Updated Successfully!\n\n{diff} new copy(ies) added.\nTotal copies: {newCount}",
+                            "Update Complete");
+                    }
+                    else if (diff < 0)
+                    {
+                        _bookService.RemoveCopies(_editingTitleId.Value, Math.Abs(diff));
+                        CustomMessageBox.Show(
+                            $"Book Updated Successfully!\n\n{Math.Abs(diff)} copy(ies) removed.\nTotal copies: {newCount}",
+                            "Update Complete");
+                    }
+                    else
+                    {
+                        CustomMessageBox.Show($"Book Updated Successfully!", "Update Complete");
+                    }
                     this.Close();
                 }
                 else

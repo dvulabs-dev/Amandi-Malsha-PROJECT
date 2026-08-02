@@ -224,16 +224,19 @@ namespace SarasaviLibrary.BusinessLogic.Services
             
             if (pendingReservation != null)
             {
+                // Mark the copy as Reserved (held for this borrower)
                 copy.Status = CopyStatus.Reserved;
-                message += $"\nNOTIFICATION: This title was reserved by User {pendingReservation.Borrower.Name} " +
-                           $"(ID: {pendingReservation.UserNumber}). The copy is now reserved for them.";
+                // Upgrade the reservation so the librarian can activate the loan
+                pendingReservation.Status = ReservationStatus.ReadyForPickup;
+                message += $"\nNOTIFICATION: This title was reserved by {pendingReservation.Borrower.Name} " +
+                           $"(User #{pendingReservation.UserNumber}). " +
+                           $"The copy is now held for them — activate their loan from the Reservations screen.";
             }
             else
             {
                 copy.Status = CopyStatus.Available;
             }
             
-            context.SaveChanges();
             context.SaveChanges();
             return message;
         }

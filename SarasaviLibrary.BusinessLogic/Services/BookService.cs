@@ -106,11 +106,28 @@ namespace SarasaviLibrary.BusinessLogic.Services
             var title = context.Titles.FirstOrDefault(t => t.TitleId == id);
             if (title == null) throw new Exception("Title not found.");
 
-            // Optionally check for copies/loans before delete if needed, but EF will throw FK exception if copies are associated.
-            if (context.BookCopies.Any(c => c.TitleId == id))
-            {
-                throw new Exception("Cannot delete this book because it has registered copies. Please remove all copies first.");
-            }
+            // Block deletion only when copies are actively on loan or have pending/ready reservations
+            bool hasActiveLoans = context.Loans.Any(l =>
+                l.BookCopy.TitleId == id &&
+                (l.Status == LoanStatus.Active || l.Status == LoanStatus.Overdue));
+
+            if (hasActiveLoans)
+                throw new Exception(
+                    "Cannot delete this book — one or more copies are currently on loan. " +
+                    "Please wait until all copies are returned before deleting.");
+
+            bool hasActiveReservations = context.Reservations.Any(r =>
+                r.TitleId == id &&
+                (r.Status == ReservationStatus.Pending || r.Status == ReservationStatus.ReadyForPickup));
+
+            if (hasActiveReservations)
+                throw new Exception(
+                    "Cannot delete this book — it has pending or ready-for-pickup reservations. " +
+                    "Please cancel all reservations before deleting.");
+
+            // Safe to delete — remove all copies first, then the title
+            var copies = context.BookCopies.Where(c => c.TitleId == id).ToList();
+            context.BookCopies.RemoveRange(copies);
 
             context.Titles.Remove(title);
             context.SaveChanges();
